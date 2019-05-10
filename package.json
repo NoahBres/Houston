@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel public/index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build public/index.html"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "cssnano": "^4.1.10",
     "tailwindcss": "^1.0.0-beta.8"
   }
 }
