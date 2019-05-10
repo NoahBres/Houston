@@ -5,9 +5,12 @@ import Dashboard from "./views/Dashboard";
 import Logs from "./views/Logs";
 import Settings from "./views/Settings";
 
+import Navbar from "./components/Navbar";
+
 export default function App() {
   return (
     <HashRouter>
+      <Navbar />
       <ul className="list-disc pl-6">
         <li>
           <NavLink to="/">Dashboard</NavLink>
