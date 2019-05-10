@@ -1,17 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-// import "./styles/app.scss";
+import App from "./App.js";
+import "../public/css/app.scss";
 
-class Component extends React.Component {
-  render() {
-    return (
-      <div>
-        <h2 className="text-blue-600 font-bold">yo</h2>
-      </div>
-    );
-  }
-}
-
-const App = document.getElementById("app");
-ReactDOM.render(<Component />, App);
+const root = document.getElementById("root");
+ReactDOM.render(<App />, root);
