@@ -2,8 +2,8 @@ import React from "react";
 
 export default function Settings() {
   return (
-    <div>
+    <main>
       <h2>Settings view</h2>
-    </div>
+    </main>
   );
 }
