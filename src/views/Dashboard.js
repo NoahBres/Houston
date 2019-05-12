@@ -2,8 +2,10 @@ import React from "react";
 
 export default function Dashboard() {
   return (
-    <main>
-      <h2>dashboard view</h2>
+    <main className="">
+      <div className="flex flex-row">
+        <div className="bg-notblack w-full h-56" />
+      </div>
     </main>
   );
 }
