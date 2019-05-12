@@ -15,7 +15,7 @@ export default function Sidebar(props) {
       }}
     >
       <div className="flex flex-col items-center">
-        <h2 className="text-lg text-white uppercase self-start mt-4 mb-3 ml-6">
+        <h2 className="text-lg uppercase self-start mt-4 mb-3 ml-6">
           <img
             src={avatar_uri}
             className="w-8 h-8 rounded-full inline-block mr-3 mb-px"
@@ -31,7 +31,7 @@ export default function Sidebar(props) {
               <NavLink
                 exact
                 to={prop.path}
-                className="flex flex-row items-center text-center text-white py-5"
+                className="flex flex-row items-center text-center py-5"
               >
                 <SvgIcon
                   d={prop.svg_path}
