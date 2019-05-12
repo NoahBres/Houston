@@ -8,17 +8,14 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 
 export default function App() {
-  // const sc = new SocketClient("192.168.49.1:889");
-  // sc.addMessageListener(msg => {
-  //   console.log(`received message: ${msg}`);
-  // });
-  var sc;
-
   useEffect(() => {
-    sc = new SocketClient("192.168.49.1:8889");
+    SocketClient.connect("192.168.49.1:8889");
+    SocketClient.addMessageListener(msg => {
+      console.log(`received message: ${msg}`);
+    });
 
     return function cleanup() {
-      sc.close();
+      SocketClient.close();
     };
   });
 
