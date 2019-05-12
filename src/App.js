@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Route, HashRouter, Switch } from "react-router-dom";
 
 import routes from "./routes";
@@ -8,8 +8,10 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 
 export default function App() {
+  const [socketAddress, setSocketAddress] = useState("192.168.49.1:8889");
+
   useEffect(() => {
-    SocketClient.connect("192.168.49.1:8889");
+    SocketClient.connect(socketAddress);
     SocketClient.addMessageListener(msg => {
       console.log(`received message: ${msg}`);
     });
