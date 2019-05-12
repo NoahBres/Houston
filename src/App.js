@@ -1,11 +1,27 @@
+import React, { useEffect } from "react";
 import { Route, HashRouter, Switch } from "react-router-dom";
 
 import routes from "./routes";
+import SocketClient from "./SocketClient";
 
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 
 export default function App() {
+  // const sc = new SocketClient("192.168.49.1:889");
+  // sc.addMessageListener(msg => {
+  //   console.log(`received message: ${msg}`);
+  // });
+  var sc;
+
+  useEffect(() => {
+    sc = new SocketClient("192.168.49.1:8889");
+
+    return function cleanup() {
+      sc.close();
+    };
+  });
+
   return (
     <HashRouter>
       <Navbar title="Houston" />
