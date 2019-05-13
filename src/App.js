@@ -26,7 +26,7 @@ export default function App() {
       <Navbar title="Houston" />
       <div className="flex flex-row" style={{ height: "calc(100vh - 75px)" }}>
         <Sidebar title="Team 10940" avatar="react-logo.png" />
-        <section className="content w-full pl-2 pr-5">
+        <section className="content w-full">
           <Switch>
             {routes.map((prop, key) => {
               return (
