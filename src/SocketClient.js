@@ -42,6 +42,13 @@ class Client {
   addMessageListener(func, thisVal = null) {
     this.messageListeners.push({ func: func, thisVal: thisVal });
   }
+
+  removeMessageListener(func) {
+    const index = this.messageListeners.indexOf(func);
+    if (index > -1) this.messageListeners.splice(index, 1);
+
+    // this.messageListeners = this.messageListeners.filter(e => e !== func)
+  }
 }
 
 var SocketClient = new Client("");
