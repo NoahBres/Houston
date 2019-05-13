@@ -19,7 +19,7 @@ export default function App() {
     return function cleanup() {
       SocketClient.close();
     };
-  });
+  }, []);
 
   return (
     <HashRouter>
