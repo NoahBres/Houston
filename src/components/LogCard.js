@@ -8,6 +8,8 @@ import SocketClient from "../SocketClient";
 export default function LogCard(props) {
   const [logs, setLogs] = useState([]);
 
+  const { windowHeight, windowWidth } = useWindowDimensions();
+
   const listRef = useRef(null);
   const { stayScrolled } = useStayScrolled(listRef);
 
@@ -18,9 +20,9 @@ export default function LogCard(props) {
   useEffect(() => {
     SocketClient.addMessageListener(messageListener);
 
-    setInterval(() => {
-      messageListener(`test`);
-    }, 2000);
+    // setInterval(() => {
+    //   messageListener(`test`);
+    // }, 2000);
 
     return function cleanup() {
       SocketClient.removeMessageListener(messageListener);
@@ -38,7 +40,11 @@ export default function LogCard(props) {
         <h2 className="text-3xl font-thin">Logging</h2>
       </div>
       <div className="px-4 my-3">
-        <ul ref={listRef} className="overflow-auto" style={{ height: "20rem" }}>
+        <ul
+          ref={listRef}
+          className="overflow-auto"
+          style={{ height: windowHeight > 400 ? "20rem" : "13rem" }}
+        >
           {logs.map((e, i) => (
             <li key={i}>
               {i} {e}
@@ -48,4 +54,29 @@ export default function LogCard(props) {
       </div>
     </Card>
   );
+}
+
+function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions()
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return windowDimensions;
+}
+
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height
+  };
 }
