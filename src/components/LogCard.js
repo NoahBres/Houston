@@ -5,14 +5,18 @@ import Card from "./Card";
 
 import SocketClient from "../SocketClient";
 
-export default function LogCard(props) {
+export default function LogCard({ className = "", height = "", filter = [] }) {
   const [logs, setLogs] = useState([]);
 
   const listRef = useRef(null);
   const { stayScrolled } = useStayScrolled(listRef);
 
   const messageListener = msg => {
-    setLogs(l => l.concat(msg));
+    console.log(msg["msg"]);
+    if (filter.includes(msg["tag"])) return;
+
+    const logToArray = [[msg["msg"], msg["tag"], msg["time"]]];
+    setLogs(l => l.concat(logToArray));
   };
 
   useEffect(() => {
@@ -32,7 +36,7 @@ export default function LogCard(props) {
   }, [logs]);
 
   return (
-    <Card className={props.className} height={props.height}>
+    <Card className={className} height={height}>
       <div className="px-4 pt-4">
         <h5 className="text-xs font-light text-gray-600">Real time</h5>
         <h2 className="text-3xl font-thin">Logging</h2>
