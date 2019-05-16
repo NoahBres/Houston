@@ -9,10 +9,10 @@ export default function Dashboard() {
     <main className="pr-3 overflow-y-auto h-full">
       <div className="flex flex-row">
         <LogCard
-          className="w-2/3"
+          className="w-full"
           height={windowSize.innerHeight > 400 ? "20rem" : "13rem"}
+          filter={["accelerometer"]}
         />
-        <LogCard className="w-1/3" />
       </div>
     </main>
   );
