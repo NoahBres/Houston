@@ -17,9 +17,16 @@ class Client {
     this.socket.onopen = () => (this.open = true);
 
     this.socket.onmessage = event => {
-      console.log(event);
+      // console.log(event);
+      let parsedMsg;
+      try {
+        parsedMsg = JSON.parse(event.data);
+      } catch (e) {
+        parsedMsg = event.data;
+      }
+
       this.messageListeners.forEach(e => {
-        e["func"].call(e["thisval"], event.data);
+        e["func"].call(e["thisval"], parsedMsg, event.data);
       });
     };
 
