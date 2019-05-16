@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import LogCard from "../components/LogCard";
+import SocketInfoCard from "../components/SocketInfoCard";
 
 export default function Dashboard() {
   const windowSize = useWindowSize();
@@ -8,8 +9,12 @@ export default function Dashboard() {
   return (
     <main className="pr-3 overflow-y-auto h-full">
       <div className="flex flex-row">
+        <SocketInfoCard
+          className="w-1/3"
+          height={windowSize.innerHeight > 400 ? "20rem" : "13rem"}
+        />
         <LogCard
-          className="w-full"
+          className="w-2/3"
           height={windowSize.innerHeight > 400 ? "20rem" : "13rem"}
           filter={["accelerometer"]}
         />
