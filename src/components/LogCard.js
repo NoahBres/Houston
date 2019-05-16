@@ -32,17 +32,13 @@ export default function LogCard(props) {
   }, [logs]);
 
   return (
-    <Card className={props.className}>
+    <Card className={props.className} height={props.height}>
       <div className="px-4 pt-4">
         <h5 className="text-xs font-light text-gray-600">Real time</h5>
         <h2 className="text-3xl font-thin">Logging</h2>
       </div>
-      <div className="px-4 my-3">
-        <ul
-          ref={listRef}
-          className="overflow-auto"
-          style={{ height: props.height }}
-        >
+      <div className="px-4 my-3" style={{ height: "calc(100% - 7rem)" }}>
+        <ul ref={listRef} className="overflow-auto h-full">
           {logs.map((e, i) => (
             <li key={i}>
               {i} {e}
