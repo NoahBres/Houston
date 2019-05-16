@@ -5,16 +5,20 @@ import Card from "./Card";
 import SocketClient from "../SocketClient";
 
 export default function SocketInfoCard({ className = "", height = "" }) {
-  const [socketOpen, setSocketOpen] = useState(false);
+  const [socketState, setSocketState] = useState("disconnected");
+
+  function reconnect() {
+    SocketClient.connect();
+  }
 
   useEffect(() => {
-    function handleOpenClose(open) {
-      setSocketOpen(open);
+    function handleStateChange(state) {
+      setSocketState(state);
     }
 
-    SocketClient.addOpenCloseListener(handleOpenClose);
+    SocketClient.addStateChangeListener(handleStateChange);
 
-    return () => SocketClient.removeOpenCloseListener(handleOpenClose);
+    return () => SocketClient.removeStateChangeListener(handleStateChange);
   }, []);
 
   return (
@@ -23,8 +27,25 @@ export default function SocketInfoCard({ className = "", height = "" }) {
         <h5 className="text-xs font-light text-gray-600">Real time</h5>
         <h2 className="text-3xl font-thin">Status</h2>
       </div>
-      <div className="px-4 my-3">
-        <p>{socketOpen ? "open" : "false"}</p>
+      <div className="px-4 my-3 flex flex-col justify-between">
+        <p className="font-light tracking-wider">{SocketClient.address}</p>
+        <p className="font-light tracking-wide">
+          {socketState == "connected"
+            ? "Connected ✔"
+            : socketState == "disconnected"
+            ? "Disconnected ❌"
+            : "Connecting..."}
+        </p>
+        <button
+          className={`mt-20 ${
+            socketState == "connected"
+              ? "text-gray-600 pointer-events-none"
+              : ""
+          }`}
+          onClick={reconnect}
+        >
+          Reconnect
+        </button>
       </div>
     </Card>
   );
