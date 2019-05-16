@@ -2,21 +2,26 @@ class Client {
   constructor(address) {
     this.address = address;
     this.open = false;
+    this.state = "disconnected"; // Disconnected, connecting, or connected
 
     this.messageListeners = [];
     this.openCloseListeners = [];
+    this.stateChangeListeners = [];
 
     this.connect(this.address);
   }
 
   connect(address) {
-    this.address = address;
+    this.address = address || this.address;
     if (this.address === "") return;
+
+    this.setState("connecting");
 
     this.socket = new WebSocket(`ws://${this.address}`);
 
     this.socket.onopen = () => {
       this.open = true;
+      this.setState("connected");
 
       this.openCloseListeners.forEach(e => {
         e["func"].call(e["thisVal"], this.open);
@@ -39,10 +44,19 @@ class Client {
 
     this.socket.onclose = () => {
       this.open = false;
+      this.setState("disconnected");
 
       this.openCloseListeners.forEach(e => {
         e["func"].call(e["thisVal"], this.open);
       });
+
+      // setTimeout(() => this.connect(this.address), 1000);
+    };
+
+    this.socket.onerror = () => {
+      this.setState("disconnected");
+
+      // setTimeout(() => this.connect(this.address), 1000);
     };
   }
 
@@ -60,6 +74,14 @@ class Client {
 
     this.openCloseListeners.forEach(e => {
       e["func"].call(e["thisVal"], this.open);
+    });
+  }
+
+  setState(state) {
+    this.state = state;
+
+    this.stateChangeListeners.forEach(e => {
+      e["func"].call(e["thisVal"], this.state);
     });
   }
 
@@ -81,6 +103,15 @@ class Client {
   removeOpenCloseListener(func) {
     const index = this.openCloseListeners.indexOf(func);
     if (index > -1) this.openCloseListeners.splice(index, 1);
+  }
+
+  addStateChangeListener(func, thisVal = null) {
+    this.stateChangeListeners.push({ func, thisVal });
+  }
+
+  removeStateChangeListener(func) {
+    const index = this.stateChangeListeners.indexOf(func);
+    if (index > -1) this.stateChangeListeners.splice(index, 1);
   }
 }
 
