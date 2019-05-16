@@ -4,6 +4,7 @@ class Client {
     this.open = false;
 
     this.messageListeners = [];
+    this.openCloseListeners = [];
 
     this.connect(this.address);
   }
@@ -14,7 +15,13 @@ class Client {
 
     this.socket = new WebSocket(`ws://${this.address}`);
 
-    this.socket.onopen = () => (this.open = true);
+    this.socket.onopen = () => {
+      this.open = true;
+
+      this.openCloseListeners.forEach(e => {
+        e["func"].call(e["thisVal"], this.open);
+      });
+    };
 
     this.socket.onmessage = event => {
       // console.log(event);
@@ -26,11 +33,17 @@ class Client {
       }
 
       this.messageListeners.forEach(e => {
-        e["func"].call(e["thisval"], parsedMsg, event.data);
+        e["func"].call(e["thisVal"], parsedMsg, event.data);
       });
     };
 
-    this.socket.onclose = () => (this.open = false);
+    this.socket.onclose = () => {
+      this.open = false;
+
+      this.openCloseListeners.forEach(e => {
+        e["func"].call(e["thisVal"], this.open);
+      });
+    };
   }
 
   send(payload) {
@@ -44,10 +57,14 @@ class Client {
   close() {
     this.socket.close();
     this.open = false;
+
+    this.openCloseListeners.forEach(e => {
+      e["func"].call(e["thisVal"], this.open);
+    });
   }
 
   addMessageListener(func, thisVal = null) {
-    this.messageListeners.push({ func: func, thisVal: thisVal });
+    this.messageListeners.push({ func, thisVal });
   }
 
   removeMessageListener(func) {
@@ -55,6 +72,15 @@ class Client {
     if (index > -1) this.messageListeners.splice(index, 1);
 
     // this.messageListeners = this.messageListeners.filter(e => e !== func)
+  }
+
+  addOpenCloseListener(func, thisVal = null) {
+    this.openCloseListeners.push({ func, thisVal });
+  }
+
+  removeOpenCloseListener(func) {
+    const index = this.openCloseListeners.indexOf(func);
+    if (index > -1) this.openCloseListeners.splice(index, 1);
   }
 }
 
