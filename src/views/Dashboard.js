@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import LogCard from "../components/LogCard";
 import SocketInfoCard from "../components/SocketInfoCard";
 
+import useWindowSize from "../hooks/useWindowSize";
+
 export default function Dashboard() {
   const windowSize = useWindowSize();
 
@@ -21,31 +23,4 @@ export default function Dashboard() {
       </div>
     </main>
   );
-}
-
-function getSize() {
-  return {
-    innerHeight: window.innerHeight,
-    innerWidth: window.innerWidth,
-    outerHeight: window.outerHeight,
-    outerWidth: window.outerWidth
-  };
-}
-
-function useWindowSize() {
-  let [windowSize, setWindowSize] = useState(getSize());
-
-  function handleResize() {
-    setWindowSize(getSize());
-  }
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  return windowSize;
 }
