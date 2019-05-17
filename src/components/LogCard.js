@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import useStayScrolled from "react-stay-scrolled";
 
 import Card from "./Card";
+import SvgIcon from "./SvgIcon";
+import Dropdown from "./Dropdown";
 
 import SocketClient from "../SocketClient";
-import SvgIcon from "./SvgIcon";
 import useHover from "../hooks/useHover";
 
 const settingsSvgPath = [
@@ -14,6 +15,14 @@ const settingsSvgPath = [
 
 const settingsSvgViewBox = [20, 20];
 
+const settingsArrowStyle = {
+  borderTop: "0.4em solid",
+  borderRight: "0.4em solid transparent",
+  borderBottom: "0",
+  borderLeft: "0.4em solid transparent",
+  transformOrigin: "100% 0.2em"
+};
+
 export default function LogCard({ className = "", height = "", filter = [] }) {
   const [logs, setLogs] = useState([]);
 
@@ -21,6 +30,12 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
   const { stayScrolled } = useStayScrolled(listRef);
 
   const [settingsBtnHoverRef, settingsBtnIsHovered] = useHover();
+  const [settingsBtnIsToggled, settingsBtnSetToggle] = useState(false);
+  const settingsDropdownRef = useRef(null);
+
+  const toggleSettingsBtn = () => {
+    settingsBtnSetToggle(b => !b);
+  };
 
   const messageListener = msg => {
     console.log(msg["msg"]);
@@ -28,6 +43,17 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
 
     const logToArray = [[msg["msg"], msg["tag"], msg["time"]]];
     setLogs(l => l.concat(logToArray));
+  };
+
+  const handleClickOutsideSettingsBtn = event => {
+    if (
+      settingsDropdownRef.current &&
+      settingsBtnHoverRef.current &&
+      !settingsDropdownRef.current.contains(event.target) &&
+      !settingsBtnHoverRef.current.contains(event.target)
+    ) {
+      settingsBtnSetToggle(false);
+    }
   };
 
   useEffect(() => {
@@ -67,6 +93,17 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
     stayScrolled();
   }, [logs]);
 
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutsideSettingsBtn, false);
+    return () => {
+      document.removeEventListener(
+        "click",
+        handleClickOutsideSettingsBtn,
+        false
+      );
+    };
+  }, []);
+
   return (
     <Card className={className} height={height}>
       <div className="px-4 pt-4">
@@ -75,15 +112,38 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
           <h2 className="text-3xl font-thin">Logging</h2>
         </div>
         <div className="w-1/2 inline-flex justify-end">
-          <button ref={settingsBtnHoverRef}>
-            <SvgIcon
-              d={settingsSvgPath}
-              fill={settingsBtnIsHovered ? "#fff" : "#718096"}
-              width="1.5rem"
-              viewBox={settingsSvgViewBox}
-              pathClassName="transition-300-ease"
-            />
-          </button>
+          <div className="relative">
+            <button
+              type="button"
+              ref={settingsBtnHoverRef}
+              className="flex items-center relative"
+              onClick={toggleSettingsBtn}
+            >
+              <SvgIcon
+                d={settingsSvgPath}
+                fill={settingsBtnIsHovered ? "#fff" : "#718096"}
+                width="1.5rem"
+                viewBox={settingsSvgViewBox}
+                pathClassName="transition-300-ease"
+              />
+              <span
+                className="w-3 h-3 inline-block transition-300-ease ml-1 mt-1"
+                style={{
+                  ...settingsArrowStyle,
+                  borderTopColor: settingsBtnIsHovered ? "#fff" : "#718096",
+                  transform: settingsBtnIsToggled ? "scaleY(-1)" : "scaleY(1)"
+                }}
+              />
+            </button>
+            <Dropdown
+              ref={settingsDropdownRef}
+              position="bottom"
+              className="bg-white text-black p-2 mt-2 rounded-sm transition-300-ease"
+              open={settingsBtnIsToggled}
+            >
+              <p>Test</p>
+            </Dropdown>
+          </div>
         </div>
       </div>
       <div className="px-4 my-3" style={{ height: "calc(100% - 7rem)" }}>
