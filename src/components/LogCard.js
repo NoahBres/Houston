@@ -33,6 +33,11 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
   const [settingsBtnIsToggled, settingsBtnSetToggle] = useState(false);
   const settingsDropdownRef = useRef(null);
 
+  const [settings, setSettings] = useState({
+    showTime: true,
+    showDate: true
+  });
+
   const toggleSettingsBtn = () => {
     settingsBtnSetToggle(b => !b);
   };
@@ -54,6 +59,14 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
     ) {
       settingsBtnSetToggle(false);
     }
+  };
+
+  const settingsHandleInputChange = event => {
+    const target = event.target;
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    const name = target.name;
+
+    setSettings({ ...settings, [name]: value });
   };
 
   useEffect(() => {
@@ -138,10 +151,31 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
             <Dropdown
               ref={settingsDropdownRef}
               position="bottom"
-              className="bg-white text-black p-2 mt-2 rounded-sm transition-300-ease"
+              className="bg-white text-black p-2 mt-2 rounded transition-300-ease w-40"
               open={settingsBtnIsToggled}
             >
-              <p>Test</p>
+              <label className="cursor-pointer select-none flex flex-row items-center">
+                <input
+                  type="checkbox"
+                  name="showTime"
+                  checked={settings.showTime}
+                  onChange={settingsHandleInputChange}
+                />
+                <span className="ml-3">Show Time</span>
+              </label>
+              <label
+                className={`ml-4 cursor-pointer select-none flex flex-row items-center ${
+                  settings.showTime ? "" : "opacity-25 pointer-events-none"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  name="showDate"
+                  checked={settings.showDate}
+                  onChange={settingsHandleInputChange}
+                />
+                <span className="ml-3">Show Date</span>
+              </label>
             </Dropdown>
           </div>
         </div>
@@ -150,7 +184,15 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
         <ul ref={listRef} className="overflow-auto h-full">
           {logs.map((e, i) => (
             <li key={i} className="flex flex-row">
-              <p className="w-48 text-gray-600">{e[2]}</p>
+              <p
+                className={`text-gray-600 ${
+                  settings.showTime ? "" : "hidden"
+                } ${settings.showDate ? "w-48" : "w-24"}`}
+              >
+                {`${settings.showDate ? e[2].split(" ")[0] : ""} ${
+                  e[2].split(" ")[1]
+                }`}
+              </p>
               <p className="w-32">{e[1]}</p>
               <p>{e[0]}</p>
             </li>
