@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import LogCard from "../components/LogCard";
 import SocketInfoCard from "../components/SocketInfoCard";
+import ValueTableCard from "../components/ValueTableCard";
 
 import useWindowSize from "../hooks/useWindowSize";
 
@@ -10,7 +11,7 @@ export default function Dashboard() {
 
   return (
     <main className="pr-3 overflow-y-auto h-full">
-      <div className="flex flex-row">
+      <div className="flex flex-row mb-8">
         <SocketInfoCard
           className="w-1/3"
           height={windowSize.innerHeight > 400 ? "20rem" : "13rem"}
@@ -20,6 +21,9 @@ export default function Dashboard() {
           height={windowSize.innerHeight > 400 ? "20rem" : "13rem"}
           filter={["accelerometer"]}
         />
+      </div>
+      <div className="flex flex-row mt-8">
+        <ValueTableCard className="w-1/3" />
       </div>
     </main>
   );
