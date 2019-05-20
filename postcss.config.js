@@ -11,7 +11,8 @@
 // })
 
 const purgecss = require("@fullhuman/postcss-purgecss")({
-  content: ["**/*.html", "**/*.js"]
+  content: ["**/*.html", "**/*.js"],
+  defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
 });
 
 module.exports = {
