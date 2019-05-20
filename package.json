@@ -26,7 +26,8 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
-    "react-stay-scrolled": "^7.0.0"
+    "react-stay-scrolled": "^7.0.0",
+    "tailwindcss": "^1.0.0-beta.8"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -41,7 +42,6 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.13.0",
-    "prettier": "^1.17.1",
-    "tailwindcss": "^1.0.0-beta.8"
+    "prettier": "^1.17.1"
   }
 }
