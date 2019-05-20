@@ -15,7 +15,8 @@ export default function SocketInfoCard({ className = "", height = "" }) {
   const [socketState, setSocketState] = useState("disconnected");
 
   function reconnect() {
-    SocketClient.connect();
+    if (socketState == "disconnected") SocketClient.connect();
+    else if (socketState == "connected") SocketClient.close();
   }
 
   useEffect(() => {
@@ -71,14 +72,18 @@ export default function SocketInfoCard({ className = "", height = "" }) {
           </span>
         </p>
         <button
-          className={`mt-20 ${
-            socketState != "disconnected"
+          className={`mt-20 transition-300-ease ${
+            socketState == "connecting"
               ? "text-gray-600 pointer-events-none"
               : ""
-          } transition-300-ease`}
+          }`}
           onClick={reconnect}
         >
-          Reconnect
+          {socketState == "disconnected"
+            ? "Reconnect"
+            : socketState == "connected"
+            ? "Disconnect"
+            : "Connecting..."}
         </button>
       </div>
     </Card>
