@@ -129,7 +129,7 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
             <button
               type="button"
               ref={settingsBtnHoverRef}
-              className="flex items-center relative"
+              className="flex items-center relative px-2 py-2"
               onClick={toggleSettingsBtn}
             >
               <SvgIcon
@@ -138,6 +138,8 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
                 width="1.5rem"
                 viewBox={settingsSvgViewBox}
                 pathClassName="transition-300-ease"
+                className="transition-300-ease"
+                style={{ transform: settingsBtnIsToggled ? 'rotate(0deg)' : 'rotate(-45deg)'}}
               />
               <span
                 className="w-3 h-3 inline-block transition-300-ease ml-1 mt-1"
