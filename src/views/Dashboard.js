@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import LogCard from "../components/LogCard";
 import SocketInfoCard from "../components/SocketInfoCard";
 import ValueTableCard from "../components/ValueTableCard";
+import CommandCard from "../components/CommandCard";
 
 import useWindowSize from "../hooks/useWindowSize";
 
@@ -30,6 +31,7 @@ export default function Dashboard() {
           valueKeys={sensorList}
           renderDelay={1000 / 60}
         />
+        <CommandCard className="w-1/3" />
       </div>
     </main>
   );
