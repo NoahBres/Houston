@@ -9,8 +9,10 @@ import useWindowSize from "../hooks/useWindowSize";
 export default function Dashboard() {
   const windowSize = useWindowSize();
 
+  const sensorList = ["accelerometer"];
+
   return (
-    <main className="pr-3 overflow-y-auto h-full">
+    <main className="pr-3 pb-3 overflow-y-auto h-full">
       <div className="flex flex-row mb-8">
         <SocketInfoCard
           className="w-1/3"
@@ -19,11 +21,15 @@ export default function Dashboard() {
         <LogCard
           className="w-2/3"
           height={windowSize.innerHeight > 400 ? "20rem" : "13rem"}
-          filter={["accelerometer"]}
+          filter={sensorList}
         />
       </div>
       <div className="flex flex-row mt-8">
-        <ValueTableCard className="w-1/3" />
+        <ValueTableCard
+          className="w-1/3"
+          valueKeys={sensorList}
+          renderDelay={1000 / 60}
+        />
       </div>
     </main>
   );
