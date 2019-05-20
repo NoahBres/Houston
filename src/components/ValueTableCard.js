@@ -1,11 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import Card from "./Card";
 
 import SocketClient from "../SocketClient";
+import useInterval from "../hooks/useInterval";
 
-export default function ValueTableCard({ className = "", style = {} }) {
-  const messageListener = msg => {};
+export default function ValueTableCard({
+  className = "",
+  style = {},
+  valueKeys = [],
+  renderDelay = 16
+}) {
+  const [valueTable, setValueTable] = useState(
+    valueKeys.reduce((acc, curr) => {
+      acc[curr] = 0;
+      return acc;
+    }, {})
+  );
+
+  // Copy of value table but only changes at 60fps
+  const [renderedValueTable, setRenderedValueTable] = useState(
+    valueKeys.reduce((acc, curr) => {
+      acc[curr] = 0;
+      return acc;
+    }, {})
+  );
+
+  useInterval(() => {
+    setRenderedValueTable(o => Object.assign(o, valueTable));
+  }, renderDelay);
+
+  const messageListener = msg => {
+    if (valueKeys.includes(msg["tag"]))
+      setValueTable({ ...valueTable, [msg["tag"]]: msg["msg"] });
+  };
 
   useEffect(() => {
     SocketClient.addMessageListener(messageListener);
@@ -16,7 +44,7 @@ export default function ValueTableCard({ className = "", style = {} }) {
   }, []);
 
   return (
-    <Card className={`p-5 ${className}`} style={style}>
+    <Card className={`${className}`}>
       <div className="px-4 pt-4">
         <h5 className="text-xs font-light text-gray-600">Real time</h5>
         <h2 className="text-3xl font-thin">Values</h2>
@@ -30,14 +58,12 @@ export default function ValueTableCard({ className = "", style = {} }) {
             </tr>
           </thead>
           <tbody>
-            <tr className="border-b border-gray-700">
-              <td className="px-2 py-3 pr-5">Linear-x</td>
-              <td className="px-2 py-3 pr-5">-0.4532</td>
-            </tr>
-            <tr className="border-b border-gray-700">
-              <td className="px-2 py-3 pr-5">Linear-y</td>
-              <td className="px-2 py-3 pr-5">9.6345</td>
-            </tr>
+            {Object.entries(renderedValueTable).map(([key, value], i) => (
+              <tr className="border-b border-gray-700" key={key}>
+                <td className="px-2 py-3 pr-5">{key}</td>
+                <td className="px-2 py-3 pr-5">{value}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
