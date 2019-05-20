@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import Card from "./Card";
 
-import SocketClient from "../SocketClient";
+// import SocketClient from "../SocketClient";
 
-export default function CommandCard({ className = "" }) {
+function CommandCard({ className = "" }) {
   const [isLogging, setIsLogging] = useState(false);
 
   function handleRemoteLoggingClick() {
@@ -19,7 +20,7 @@ export default function CommandCard({ className = "" }) {
       </div>
       <div className="px-4 my-3">
         <div className="flex flex-row py-2 items-center">
-          <label className="font-light tracking-wide">Remote Logging: </label>
+          <p className="font-light tracking-wide">Remote Logging:</p>
           <button
             className={`ml-3 text-black uppercase tracking-wide font-medium text-sm ${
               isLogging
@@ -27,6 +28,7 @@ export default function CommandCard({ className = "" }) {
                 : "bg-green-500 hover:bg-green-700"
             } px-3 py-1 rounded transition-300-ease`}
             onClick={handleRemoteLoggingClick}
+            type="button"
           >
             {isLogging ? "Stop" : "Start"}
           </button>
@@ -37,7 +39,10 @@ export default function CommandCard({ className = "" }) {
             type="text"
             placeholder="Type your command"
           />
-          <button className="px-3 py-2 hover:text-gray-500 transition-300-ease">
+          <button
+            className="px-3 py-2 hover:text-gray-500 transition-300-ease"
+            type="button"
+          >
             Send
           </button>
         </div>
@@ -45,3 +50,13 @@ export default function CommandCard({ className = "" }) {
     </Card>
   );
 }
+
+CommandCard.propTypes = {
+  className: PropTypes.string
+};
+
+CommandCard.defaultProps = {
+  className: ""
+};
+
+export default CommandCard;
