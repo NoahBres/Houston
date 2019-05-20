@@ -30,7 +30,8 @@ const Dropdown = React.forwardRef(
           ...style,
           ...styles,
           transform: open ? "translateY(0)" : "translateY(-0.6em)",
-          opacity: open ? "1" : "0"
+          opacity: open ? "1" : "0",
+          pointerEvents: open ? '' : 'none'
         }}
       >
         <span className="absolute" style={tinyArrowStyle} />
