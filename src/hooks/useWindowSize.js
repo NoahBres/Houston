@@ -1,28 +1,33 @@
 import { useState, useEffect } from "react";
 
-function getSize() {
-  return {
-    innerHeight: window.innerHeight,
-    innerWidth: window.innerWidth,
-    outerHeight: window.outerHeight,
-    outerWidth: window.outerWidth
-  };
-}
-
 export default function useWindowSize() {
-  let [windowSize, setWindowSize] = useState(getSize());
+  const isClient = typeof window === "object";
 
-  function handleResize() {
-    setWindowSize(getSize());
-  }
+  const [windowSize, setWindowSize] = useState({
+    innerHeight: isClient ? window.innerHeight : undefined,
+    innerWidth: isClient ? window.innerWidth : undefined,
+    outerHeight: isClient ? window.outerHeight : undefined,
+    outerWidth: isClient ? window.outerWidth : undefined
+  });
 
   useEffect(() => {
+    if (!isClient) return false;
+
+    function handleResize() {
+      setWindowSize({
+        innerHeight: isClient ? window.innerHeight : undefined,
+        innerWidth: isClient ? window.innerWidth : undefined,
+        outerHeight: isClient ? window.outerHeight : undefined,
+        outerWidth: isClient ? window.outerWidth : undefined
+      });
+    }
+
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [isClient]);
 
   return windowSize;
 }
