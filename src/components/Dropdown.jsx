@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 
 const tinyArrowStyle = {
@@ -22,7 +22,6 @@ const Dropdown = React.forwardRef(
       left: "",
       right: "0"
     };
-
     return (
       <div
         ref={ref}
@@ -62,4 +61,43 @@ Dropdown.defaultProps = {
   children: []
 };
 
-export default Dropdown;
+function useDropdown(btnRef, dropdownRef, initialState = false) {
+  const [isOpened, setIsOpened] = useState(initialState);
+
+  const toggleDropdown = useCallback(
+    event => {
+      if (btnRef.current && !btnRef.current.contains(event.target)) {
+        setIsOpened(false);
+      } else {
+        setIsOpened(o => !o);
+      }
+    },
+    [btnRef]
+  );
+
+  useEffect(() => {
+    const listener = event => {
+      if (
+        !btnRef.current ||
+        btnRef.current.contains(event.target) ||
+        (!dropdownRef.current || dropdownRef.current.contains(event.target))
+      ) {
+        return;
+      }
+
+      toggleDropdown(event);
+    };
+
+    document.addEventListener("mousedown", listener);
+    document.addEventListener("touchstart", listener);
+
+    return () => {
+      document.addEventListener("mousedown", listener);
+      document.addEventListener("touchstart", listener);
+    };
+  }, [btnRef, dropdownRef, toggleDropdown]);
+
+  return [isOpened, toggleDropdown];
+}
+
+export { Dropdown as default, useDropdown };

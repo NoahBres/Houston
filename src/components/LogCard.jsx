@@ -5,7 +5,7 @@ import useStayScrolled from "react-stay-scrolled";
 
 import Card from "./Card";
 import SvgIcon from "./SvgIcon";
-import Dropdown from "./Dropdown";
+import Dropdown, { useDropdown } from "./Dropdown";
 
 import SocketClient from "../SocketClient";
 import useHover from "../hooks/useHover";
@@ -31,18 +31,19 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
   const listRef = useRef(null);
   const { stayScrolled } = useStayScrolled(listRef);
 
-  const [settingsBtnHoverRef, settingsBtnIsHovered] = useHover();
-  const [settingsBtnIsToggled, settingsBtnSetToggle] = useState(false);
+  const [settingsBtnRef, settingsBtnIsHovered] = useHover();
+
   const settingsDropdownRef = useRef(null);
+  const [settingsDropdownIsOpened, toggleSettingsDropdown] = useDropdown(
+    settingsBtnRef,
+    settingsDropdownRef,
+    false
+  );
 
   const [settings, setSettings] = useState({
     showTime: true,
     showDate: true
   });
-
-  const toggleSettingsBtn = () => {
-    settingsBtnSetToggle(b => !b);
-  };
 
   const messageListener = msg => {
     console.log(msg.msg);
@@ -50,17 +51,6 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
 
     const logToArray = [[msg.msg, msg.tag, msg.time]];
     setLogs(l => l.concat(logToArray));
-  };
-
-  const handleClickOutsideSettingsBtn = event => {
-    if (
-      settingsDropdownRef.current &&
-      settingsBtnHoverRef.current &&
-      !settingsDropdownRef.current.contains(event.target) &&
-      !settingsBtnHoverRef.current.contains(event.target)
-    ) {
-      settingsBtnSetToggle(false);
-    }
   };
 
   const settingsHandleInputChange = event => {
@@ -106,18 +96,7 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
 
   useLayoutEffect(() => {
     stayScrolled();
-  }, [logs]);
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutsideSettingsBtn, false);
-    return () => {
-      document.removeEventListener(
-        "click",
-        handleClickOutsideSettingsBtn,
-        false
-      );
-    };
-  }, []);
+  }, [logs, stayScrolled]);
 
   return (
     <Card className={className} height={height}>
@@ -130,9 +109,9 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
           <div className="relative">
             <button
               type="button"
-              ref={settingsBtnHoverRef}
+              ref={settingsBtnRef}
               className="flex items-center relative px-2 py-2"
-              onClick={toggleSettingsBtn}
+              onClick={toggleSettingsDropdown}
             >
               <SvgIcon
                 d={settingsSvgPath}
@@ -142,7 +121,7 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
                 pathClassName="transition-300-ease"
                 className="transition-300-ease"
                 style={{
-                  transform: settingsBtnIsToggled
+                  transform: settingsDropdownIsOpened
                     ? "rotate(0deg)"
                     : "rotate(-45deg)"
                 }}
@@ -152,7 +131,9 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
                 style={{
                   ...settingsArrowStyle,
                   borderTopColor: settingsBtnIsHovered ? "#fff" : "#718096",
-                  transform: settingsBtnIsToggled ? "scaleY(-1)" : "scaleY(1)"
+                  transform: settingsDropdownIsOpened
+                    ? "scaleY(-1)"
+                    : "scaleY(1)"
                 }}
               />
             </button>
@@ -160,7 +141,7 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
               ref={settingsDropdownRef}
               position="bottom"
               className="bg-white text-black p-2 mt-2 rounded transition-300-ease w-40"
-              open={settingsBtnIsToggled}
+              open={settingsDropdownIsOpened}
             >
               <label
                 className="cursor-pointer select-none flex flex-row items-center"
