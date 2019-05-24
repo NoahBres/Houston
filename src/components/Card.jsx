@@ -14,7 +14,10 @@ function Card({ className = "", children = [], height = "" }) {
 
 Card.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.element
+  ]),
   height: PropTypes.string
 };
 

@@ -48,7 +48,10 @@ Dropdown.propTypes = {
   style: PropTypes.object,
   className: PropTypes.string,
   position: PropTypes.string,
-  children: PropTypes.element
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.element
+  ])
 };
 
 Dropdown.defaultProps = {
