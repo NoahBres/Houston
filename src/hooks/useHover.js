@@ -8,6 +8,7 @@ export default function useHover() {
   const handleMouseOver = () => setIsHovered(true);
   const handleMouseOut = () => setIsHovered(false);
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     const elem = hoverRef.current;
 
@@ -20,7 +21,7 @@ export default function useHover() {
         elem.removeEventListener("mouseout", handleMouseOut);
       };
     }
-  }, [hoverRef.current]);
+  }, []);
 
   return [hoverRef, isHovered];
 }
