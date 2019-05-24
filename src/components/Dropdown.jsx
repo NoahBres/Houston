@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 
 const tinyArrowStyle = {
   borderTop: "0",
@@ -31,7 +32,7 @@ const Dropdown = React.forwardRef(
           ...styles,
           transform: open ? "translateY(0)" : "translateY(-0.6em)",
           opacity: open ? "1" : "0",
-          pointerEvents: open ? '' : 'none'
+          pointerEvents: open ? "" : "none"
         }}
       >
         <span className="absolute" style={tinyArrowStyle} />
@@ -40,5 +41,22 @@ const Dropdown = React.forwardRef(
     );
   }
 );
+
+Dropdown.propTypes = {
+  open: PropTypes.boolean,
+  // eslint-disable-next-line react/forbid-prop-types
+  style: PropTypes.object,
+  className: PropTypes.string,
+  position: PropTypes.string,
+  children: PropTypes.element
+};
+
+Dropdown.defaultProps = {
+  open: false,
+  style: {},
+  className: "",
+  position: "bottom",
+  children: []
+};
 
 export default Dropdown;
