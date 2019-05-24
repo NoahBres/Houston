@@ -43,7 +43,7 @@ const Dropdown = React.forwardRef(
 );
 
 Dropdown.propTypes = {
-  open: PropTypes.boolean,
+  open: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
   style: PropTypes.object,
   className: PropTypes.string,
