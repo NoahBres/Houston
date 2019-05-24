@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import Card from "./Card";
 
@@ -15,8 +16,8 @@ export default function SocketInfoCard({ className = "", height = "" }) {
   const [socketState, setSocketState] = useState("disconnected");
 
   function reconnect() {
-    if (socketState == "disconnected") SocketClient.connect();
-    else if (socketState == "connected") SocketClient.close();
+    if (socketState === "disconnected") SocketClient.connect();
+    else if (socketState === "connected") SocketClient.close();
   }
 
   useEffect(() => {
@@ -43,12 +44,12 @@ export default function SocketInfoCard({ className = "", height = "" }) {
           </span>
         </p>
         <p className="font-light tracking-wide">
-          {socketState == "connected"
-            ? "Connected ✔"
-            : socketState == "disconnected"
-            ? "Disconnected ❌"
-            : "Connecting"}
-          <span className={socketState != "connecting" ? "hidden" : ""}>
+          {(() => {
+            if (socketState === "connected") return "Connected ✔";
+            if (socketState === "disconnected") return "Disconnected ❌";
+            return "Connecting";
+          })()}
+          <span className={socketState !== "connecting" ? "hidden" : ""}>
             <span
               className="dot first rounded-full bg-white inline-block"
               style={{
@@ -73,19 +74,30 @@ export default function SocketInfoCard({ className = "", height = "" }) {
         </p>
         <button
           className={`mt-20 transition-300-ease ${
-            socketState == "connecting"
+            socketState === "connecting"
               ? "text-gray-600 pointer-events-none"
               : ""
           }`}
           onClick={reconnect}
+          type="button"
         >
-          {socketState == "disconnected"
-            ? "Reconnect"
-            : socketState == "connected"
-            ? "Disconnect"
-            : "Connecting..."}
+          {(() => {
+            if (socketState === "disconnected") return "Reconnect";
+            if (socketState === "connected") return "Disconnect";
+            return "";
+          })()}
         </button>
       </div>
     </Card>
   );
 }
+
+SocketInfoCard.propTypes = {
+  className: PropTypes.string,
+  height: PropTypes.string
+};
+
+SocketInfoCard.defaultProps = {
+  className: "",
+  height: ""
+};
