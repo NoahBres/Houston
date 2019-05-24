@@ -11,5 +11,6 @@ Houston
 - [ ] styled components or css-in-js
 - [ ] Finish logcard filter
 - [ ] Init showdate/time in logcard through props
+- [ ] Mark useOnClickOutside for deletion
 
 # Notes
