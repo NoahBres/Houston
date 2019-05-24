@@ -24,7 +24,7 @@ class Client {
       this.setState("connected");
 
       this.openCloseListeners.forEach(e => {
-        e["func"].call(e["thisVal"], this.open);
+        e.func.call(e.thisVal, this.open);
       });
     };
 
@@ -38,7 +38,7 @@ class Client {
       }
 
       this.messageListeners.forEach(e => {
-        e["func"].call(e["thisVal"], parsedMsg, event.data);
+        e.func.call(e.thisVal, parsedMsg, event.data);
       });
     };
 
@@ -47,7 +47,7 @@ class Client {
       this.setState("disconnected");
 
       this.openCloseListeners.forEach(e => {
-        e["func"].call(e["thisVal"], this.open);
+        e.func.call(e.thisVal, this.open);
       });
 
       // setTimeout(() => this.connect(this.address), 1000);
@@ -73,7 +73,7 @@ class Client {
     this.open = false;
 
     this.openCloseListeners.forEach(e => {
-      e["func"].call(e["thisVal"], this.open);
+      e.func.call(e.thisVal, this.open);
     });
   }
 
@@ -81,7 +81,7 @@ class Client {
     this.state = state;
 
     this.stateChangeListeners.forEach(e => {
-      e["func"].call(e["thisVal"], this.state);
+      e.func.call(e.thisVal, this.state);
     });
   }
 
@@ -115,6 +115,6 @@ class Client {
   }
 }
 
-var SocketClient = new Client("");
+const SocketClient = new Client("");
 
 export { SocketClient as default };
