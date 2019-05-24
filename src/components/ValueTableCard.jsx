@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import Card from "./Card";
 
@@ -7,9 +8,8 @@ import useInterval from "../hooks/useInterval";
 
 export default function ValueTableCard({
   className = "",
-  style = {},
   valueKeys = [],
-  renderDelay = 16
+  renderDelay = 62
 }) {
   const [valueTable, setValueTable] = useState(
     valueKeys.reduce((acc, curr) => {
@@ -31,8 +31,8 @@ export default function ValueTableCard({
   }, renderDelay);
 
   const messageListener = msg => {
-    if (valueKeys.includes(msg["tag"]))
-      setValueTable({ ...valueTable, [msg["tag"]]: msg["msg"] });
+    if (valueKeys.includes(msg.tag))
+      setValueTable({ ...valueTable, [msg.tag]: msg.msg });
   };
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function ValueTableCard({
             </tr>
           </thead>
           <tbody>
-            {Object.entries(renderedValueTable).map(([key, value], i) => (
+            {Object.entries(renderedValueTable).map(([key, value]) => (
               <tr className="border-b border-gray-700" key={key}>
                 <td className="px-2 py-3 pr-5 w-1/2">{key}</td>
                 <td className="px-2 py-3 pr-5 w-1/2">{value}</td>
@@ -70,3 +70,15 @@ export default function ValueTableCard({
     </Card>
   );
 }
+
+ValueTableCard.propTypes = {
+  className: PropTypes.string,
+  valueKeys: PropTypes.arrayOf(PropTypes.string),
+  renderDelay: PropTypes.number
+};
+
+ValueTableCard.defaultProps = {
+  className: "",
+  valueKeys: [],
+  renderDelay: 62
+};
