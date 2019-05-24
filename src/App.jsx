@@ -13,7 +13,7 @@ export default function App() {
   useEffect(() => {
     SocketClient.connect(socketAddress);
     SocketClient.addMessageListener(msg => {
-      console.log(`received message: ${msg}`);
+      console.log(`received message: `, msg);
     });
 
     return function cleanup() {
