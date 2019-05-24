@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import PropTypes from "prop-types";
+
 import useStayScrolled from "react-stay-scrolled";
 
 import Card from "./Card";
@@ -43,10 +45,10 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
   };
 
   const messageListener = msg => {
-    console.log(msg["msg"]);
-    if (filter.includes(msg["tag"])) return;
+    console.log(msg.msg);
+    if (filter.includes(msg.tag)) return;
 
-    const logToArray = [[msg["msg"], msg["tag"], msg["time"]]];
+    const logToArray = [[msg.msg, msg.tag, msg.time]];
     setLogs(l => l.concat(logToArray));
   };
 
@@ -62,9 +64,9 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
   };
 
   const settingsHandleInputChange = event => {
-    const target = event.target;
+    const { target } = event;
     const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
+    const { name } = target;
 
     setSettings({ ...settings, [name]: value });
   };
@@ -139,7 +141,11 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
                 viewBox={settingsSvgViewBox}
                 pathClassName="transition-300-ease"
                 className="transition-300-ease"
-                style={{ transform: settingsBtnIsToggled ? 'rotate(0deg)' : 'rotate(-45deg)'}}
+                style={{
+                  transform: settingsBtnIsToggled
+                    ? "rotate(0deg)"
+                    : "rotate(-45deg)"
+                }}
               />
               <span
                 className="w-3 h-3 inline-block transition-300-ease ml-1 mt-1"
@@ -156,12 +162,16 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
               className="bg-white text-black p-2 mt-2 rounded transition-300-ease w-40"
               open={settingsBtnIsToggled}
             >
-              <label className="cursor-pointer select-none flex flex-row items-center">
+              <label
+                className="cursor-pointer select-none flex flex-row items-center"
+                htmlFor="logcard-show-time"
+              >
                 <input
                   type="checkbox"
                   name="showTime"
                   checked={settings.showTime}
                   onChange={settingsHandleInputChange}
+                  id="logcard-show-time"
                 />
                 <span className="ml-3">Show Time</span>
               </label>
@@ -169,12 +179,14 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
                 className={`ml-4 cursor-pointer select-none flex flex-row items-center ${
                   settings.showTime ? "" : "opacity-25 pointer-events-none"
                 }`}
+                htmlFor="logcard-show-date"
               >
                 <input
                   type="checkbox"
                   name="showDate"
                   checked={settings.showDate}
                   onChange={settingsHandleInputChange}
+                  id="logcard-show-date"
                 />
                 <span className="ml-3">Show Date</span>
               </label>
@@ -184,8 +196,8 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
       </div>
       <div className="px-4 my-3" style={{ height: "calc(100% - 7rem)" }}>
         <ul ref={listRef} className="overflow-auto h-full">
-          {logs.map((e, i) => (
-            <li key={i} className="flex flex-row">
+          {logs.map(e => (
+            <li key={e} className="flex flex-row">
               <p
                 className={`text-gray-600 ${
                   settings.showTime ? "" : "hidden"
@@ -204,3 +216,15 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
     </Card>
   );
 }
+
+LogCard.propTypes = {
+  className: PropTypes.string,
+  height: PropTypes.string,
+  filter: PropTypes.arrayOf(PropTypes.string)
+};
+
+LogCard.defaultProps = {
+  className: "",
+  height: "",
+  filter: []
+};

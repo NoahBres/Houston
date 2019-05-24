@@ -17,7 +17,7 @@ const Dropdown = React.forwardRef(
   ) => {
     const styles = {
       position: "absolute",
-      top: position == "bottom" ? "100%" : "",
+      top: position === "bottom" ? "100%" : "",
       bottom: "",
       left: "",
       right: "0"
