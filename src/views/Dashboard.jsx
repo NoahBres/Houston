@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import LogCard from "../components/LogCard";
 import SocketInfoCard from "../components/SocketInfoCard";
