@@ -1,19 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Card from "./Card";
 
-// import SocketClient from "../SocketClient";
+import SocketClient from "../SocketClient";
 
 function CommandCard({ className = "" }) {
   const [isLogging, setIsLogging] = useState(false);
+
+  const [socketState, setSocketState] = useState("disconnected");
 
   function handleRemoteLoggingClick() {
     setIsLogging(i => !i);
   }
 
+  useEffect(() => {
+    function handleStateChange(state) {
+      setSocketState(state);
+    }
+
+    SocketClient.addStateChangeListener(handleStateChange);
+
+    return () => SocketClient.removeStateChangeListener(handleStateChange);
+  }, []);
+
   return (
-    <Card className={`${className}`}>
+    <Card className={`${className} relative`}>
       <div className="px-4 pt-4">
         <h5 className="text-xs font-light text-gray-600">Real time</h5>
         <h2 className="text-3xl font-thin">Commands</h2>
@@ -47,6 +59,11 @@ function CommandCard({ className = "" }) {
           </button>
         </div>
       </div>
+      <div
+        className={`${
+          socketState === "connected" ? "hidden" : ""
+        } absolute w-full h-full opacity-75 top-0 left-0 z-10 bg-notblack`}
+      />
     </Card>
   );
 }
