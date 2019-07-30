@@ -68,6 +68,23 @@ class Client {
     return true;
   }
 
+  sendMessage(message, tag, time = new Date()) {
+    function formatDate(date) {
+      const year = date.getFullYear();
+      const month = `${date.getMonth() < 10 ? "0" : ""}${date.getMonth()}`;
+      const day = date.getDate();
+
+      const hour = date.getHours();
+      const minute = date.getMinutes();
+      const seconds = date.getSeconds();
+      const milliseconds = date.getMilliseconds();
+
+      return `${year}-${month}-${day} ${hour}:${minute}:${seconds}.${milliseconds}`;
+    }
+
+    return this.send(JSON.stringify({ message, tag, time: formatDate(time) }));
+  }
+
   close() {
     this.socket.close();
     this.open = false;
