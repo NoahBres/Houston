@@ -45,14 +45,6 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
     showDate: true
   });
 
-  const messageListener = msg => {
-    console.log(msg.msg);
-    if (filter.includes(msg.tag)) return;
-
-    const logToArray = [[msg.msg, msg.tag, msg.time]];
-    setLogs(l => l.concat(logToArray));
-  };
-
   const settingsHandleInputChange = event => {
     const { target } = event;
     const value = target.type === "checkbox" ? target.checked : target.value;
@@ -62,6 +54,14 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
   };
 
   useEffect(() => {
+    const messageListener = msg => {
+      console.log(msg.msg);
+      if (filter.includes(msg.tag)) return;
+
+      const logToArray = [[msg.msg, msg.tag, msg.time]];
+      setLogs(l => l.concat(logToArray));
+    };
+
     SocketClient.addMessageListener(messageListener);
 
     // setInterval(() => {
@@ -92,7 +92,7 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
     return function cleanup() {
       SocketClient.removeMessageListener(messageListener);
     };
-  }, []);
+  }, [filter]);
 
   useLayoutEffect(() => {
     stayScrolled();
@@ -178,7 +178,7 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
       <div className="px-4 my-3" style={{ height: "calc(100% - 7rem)" }}>
         <ul ref={listRef} className="overflow-auto h-full">
           {logs.map(e => (
-            <li key={e} className="flex flex-row">
+            <li key={`${e}`} className="flex flex-row">
               <p
                 className={`text-gray-600 ${
                   settings.showTime ? "" : "hidden"
