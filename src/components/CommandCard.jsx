@@ -10,8 +10,26 @@ function CommandCard({ className = "" }) {
 
   const [socketState, setSocketState] = useState("disconnected");
 
+  const [inputState, setInputState] = useState("");
+
   function handleRemoteLoggingClick() {
+    const startOrStop = !isLogging ? "start" : "stop";
+    SocketClient.sendMessage(`logging-${startOrStop}`, "cmd");
     setIsLogging(i => !i);
+  }
+
+  function handleInputChange(event) {
+    setInputState(event.target.value);
+  }
+
+  function handleSendInput() {
+    console.log(inputState);
+  }
+
+  function handleInputKeydown(event) {
+    if (event.key === "Enter") {
+      handleSendInput();
+    }
   }
 
   useEffect(() => {
@@ -50,9 +68,13 @@ function CommandCard({ className = "" }) {
             className="bg-notblack-lighter leading-tight text-gray-500 appearance-none rounded-full w-full text-gray-700 px-4 py-2 focus:outline-none focus:bg-white border-2 border-notblack-lighter focus:border-purple-500 transition-300-ease"
             type="text"
             placeholder="Type your command"
+            value={inputState}
+            onChange={handleInputChange}
+            onKeyDown={handleInputKeydown}
           />
           <button
             className="px-3 py-2 hover:text-gray-500 transition-300-ease"
+            onClick={handleSendInput}
             type="button"
           >
             Send
