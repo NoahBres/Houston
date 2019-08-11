@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 import Card from "./Card";
@@ -11,6 +11,11 @@ function CommandCard({ className = "" }) {
   const [socketState, setSocketState] = useState("disconnected");
 
   const [inputState, setInputState] = useState("");
+  const [lastInputState, setLastInputState] = useState([]);
+  const [currentLastInputPos, setCurrentLastInputPos] = useState(0);
+  const inputRef = useRef(null);
+
+  const lastInputStateLimit = 30;
 
   function handleRemoteLoggingClick() {
     const startOrStop = !isLogging ? "start" : "stop";
@@ -23,14 +28,45 @@ function CommandCard({ className = "" }) {
   }
 
   function handleSendInput() {
-    console.log(inputState);
+    SocketClient.sendMessage(inputState, "cmd");
+
+    // Append inputMessage but limit it's size
+    setLastInputState(i => {
+      let inputArr = [inputState, ...i];
+      if (inputArr.length >= lastInputStateLimit)
+        inputArr = inputArr.slice(0, lastInputStateLimit);
+
+      return inputArr;
+    });
+
+    setInputState("");
+    setCurrentLastInputPos(-1);
+  }
+
+  function handleUpInput() {
+    console.log(currentLastInputPos);
+    if (currentLastInputPos < lastInputState.length - 1)
+      setCurrentLastInputPos(v => v + 1);
+  }
+
+  function handleDownInput() {
+    if (currentLastInputPos >= 0) setCurrentLastInputPos(v => v - 1);
   }
 
   function handleInputKeydown(event) {
-    if (event.key === "Enter") {
-      handleSendInput();
-    }
+    if (event.key === "Enter") handleSendInput();
+
+    // Up arrow
+    if (event.keyCode === 38) handleUpInput();
+    // Down arrow
+    else if (event.keyCode === 40) handleDownInput();
+    else setCurrentLastInputPos(-1);
   }
+
+  useEffect(() => {
+    if (currentLastInputPos !== -1)
+      inputRef.current.value = lastInputState[currentLastInputPos];
+  }, [currentLastInputPos, lastInputState]);
 
   useEffect(() => {
     function handleStateChange(state) {
@@ -71,6 +107,7 @@ function CommandCard({ className = "" }) {
             value={inputState}
             onChange={handleInputChange}
             onKeyDown={handleInputKeydown}
+            ref={inputRef}
           />
           <button
             className="px-3 py-2 hover:text-gray-500 transition-300-ease"
