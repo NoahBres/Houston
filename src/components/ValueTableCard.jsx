@@ -30,18 +30,18 @@ export default function ValueTableCard({
     setRenderedValueTable(o => Object.assign(o, valueTable));
   }, renderDelay);
 
-  const messageListener = msg => {
-    if (valueKeys.includes(msg.tag))
-      setValueTable({ ...valueTable, [msg.tag]: msg.msg });
-  };
-
   useEffect(() => {
+    const messageListener = msg => {
+      if (valueKeys.includes(msg.tag))
+        setValueTable({ ...valueTable, [msg.tag]: msg.msg });
+    };
+
     SocketClient.addMessageListener(messageListener);
 
     return () => {
       SocketClient.removeMessageListener(messageListener);
     };
-  }, []);
+  }, [valueKeys, valueTable]);
 
   return (
     <Card className={`${className}`}>
@@ -53,8 +53,8 @@ export default function ValueTableCard({
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-700">
-              <th className="px-2 py-3 text-left">Name</th>
-              <th className="px-2 py-3 text-left">Value</th>
+              <th className="px-2 py-3 text-left font-semibold">Name</th>
+              <th className="px-2 py-3 text-left font-semibold">Value</th>
             </tr>
           </thead>
           <tbody>
