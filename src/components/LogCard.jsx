@@ -55,7 +55,6 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
 
   useEffect(() => {
     const messageListener = msg => {
-      console.log(msg.msg);
       if (filter.includes(msg.tag)) return;
 
       const logToArray = [[msg.msg, msg.tag, msg.time]];
@@ -63,31 +62,6 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
     };
 
     SocketClient.addMessageListener(messageListener);
-
-    // setInterval(() => {
-    //   messageListener(`test`);
-    // }, 2000);
-
-    messageListener({
-      msg: "Test",
-      tag: "init",
-      time: "2019-06-21 5:32:14.523"
-    });
-    messageListener({
-      msg: "Test 2",
-      tag: "sensor",
-      time: "2019-06-21 5:32:14.523"
-    });
-    messageListener({
-      msg: "Test 3",
-      tag: "debug",
-      time: "2019-06-21 5:32:14.523"
-    });
-    messageListener({
-      msg: "Test 4",
-      tag: "command",
-      time: "2019-06-21 5:32:14.523"
-    });
 
     return function cleanup() {
       SocketClient.removeMessageListener(messageListener);
