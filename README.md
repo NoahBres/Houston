@@ -12,5 +12,6 @@ Houston
 - [ ] Finish logcard filter
 - [ ] Init showdate/time in logcard through props
 - [ ] Mark useOnClickOutside for deletion
+- [ ] Move up/down arrow in input to custom hook
 
 # Notes
