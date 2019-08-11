@@ -44,7 +44,6 @@ function CommandCard({ className = "" }) {
   }
 
   function handleUpInput() {
-    console.log(currentLastInputPos);
     if (currentLastInputPos < lastInputState.length - 1)
       setCurrentLastInputPos(v => v + 1);
   }
