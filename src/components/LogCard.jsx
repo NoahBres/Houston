@@ -53,6 +53,10 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
     setSettings({ ...settings, [name]: value });
   };
 
+  function clearLogs() {
+    setLogs([]);
+  }
+
   useEffect(() => {
     const messageListener = msg => {
       if (filter.includes(msg.tag)) return;
@@ -118,7 +122,7 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
               open={settingsDropdownIsOpened}
             >
               <label
-                className="cursor-pointer select-none flex flex-row items-center"
+                className="cursor-pointer select-none flex flex-row items-center hover:text-blue-700 transition-300-ease"
                 htmlFor="logcard-show-time"
               >
                 <input
@@ -131,7 +135,7 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
                 <span className="ml-3">Show Time</span>
               </label>
               <label
-                className={`ml-4 cursor-pointer select-none flex flex-row items-center ${
+                className={`ml-4 cursor-pointer select-none flex flex-row items-center hover:text-blue-700 transition-300-ease ${
                   settings.showTime ? "" : "opacity-25 pointer-events-none"
                 }`}
                 htmlFor="logcard-show-date"
@@ -145,12 +149,23 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
                 />
                 <span className="ml-3">Show Date</span>
               </label>
+              <input
+                className="cursor-pointer bg-transparent mt-4 hover:text-blue-700 transition-300-ease font-medium"
+                type="button"
+                value="🗑 Clear Log"
+                onClick={clearLogs}
+              />
             </Dropdown>
           </div>
         </div>
       </div>
       <div className="px-4 my-3" style={{ height: "calc(100% - 7rem)" }}>
-        <ul ref={listRef} className="overflow-auto h-full">
+        <ul
+          ref={listRef}
+          className={`overflow-auto h-full ${
+            logs.length !== 0 ? "" : "hidden"
+          }`}
+        >
           {logs.map(e => (
             <li key={`${e}`} className="flex flex-row">
               <p
@@ -167,6 +182,12 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
             </li>
           ))}
         </ul>
+        <h4 className={`mt-6 ${logs.length !== 0 ? "hidden" : ""}`}>
+          You have no logs{" "}
+          <span role="img" aria-label="smile">
+            🙂
+          </span>
+        </h4>
       </div>
     </Card>
   );
