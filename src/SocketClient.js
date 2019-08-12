@@ -107,7 +107,10 @@ class Client {
   }
 
   removeMessageListener(func) {
-    const index = this.messageListeners.indexOf(func);
+    let index = -1;
+    this.messageListeners.forEach((e, i) => {
+      if (e.func === func) index = i;
+    });
     if (index > -1) this.messageListeners.splice(index, 1);
 
     // this.messageListeners = this.messageListeners.filter(e => e !== func)
