@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import LogCard from "../components/LogCard";
 import SocketInfoCard from "../components/SocketInfoCard";
@@ -7,10 +7,28 @@ import CommandCard from "../components/CommandCard";
 
 import useWindowSize from "../hooks/useWindowSize";
 
+import SocketClient from "../SocketClient";
+
 export default function Dashboard() {
   const windowSize = useWindowSize();
 
-  const sensorList = ["accelerometer"];
+  const [sensorList, setSensorList] = useState([]);
+
+  // const sensorList = ["accelerometer"];
+  useEffect(() => {
+    const messageListener = msg => {
+      if (msg.tag === "init") {
+        const payload = JSON.parse(msg.msg);
+        setSensorList(payload["sensor-keys"]);
+      }
+    };
+
+    SocketClient.addMessageListener(messageListener);
+
+    return () => {
+      SocketClient.removeMessageListener(messageListener);
+    };
+  });
 
   return (
     <main className="pr-3 pb-3 overflow-y-auto h-full">
