@@ -178,7 +178,7 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
                 }`}
               </p>
               <p className="w-32">{e[1]}</p>
-              <p>{e[0]}</p>
+              <p className="max-w-md">{e[0]}</p>
             </li>
           ))}
         </ul>
