@@ -8,6 +8,7 @@ import CommandCard from "../components/CommandCard";
 import useWindowSize from "../hooks/useWindowSize";
 
 import SocketClient from "../SocketClient";
+import LiveValueGraph from "../components/LiveValueGraph";
 
 export default function Dashboard() {
   const windowSize = useWindowSize();
@@ -50,6 +51,13 @@ export default function Dashboard() {
           renderDelay={1000 / 30}
         />
         <CommandCard className="w-1/3" />
+      </div>
+      <div className="flex flex-row mt-8">
+        <LiveValueGraph
+          className="w-2/3"
+          valueKeys={sensorList}
+          renderDelay={1000 / 30}
+        />
       </div>
     </main>
   );
