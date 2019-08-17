@@ -9,7 +9,7 @@ import useInterval from "../hooks/useInterval";
 export default function ValueTableCard({
   className = "",
   valueKeys = [],
-  renderDelay = 62
+  renderDelay = 1000 / 30 // 30 fps
 }) {
   const [valueTable, setValueTable] = useState(
     valueKeys.reduce((acc, curr) => {
@@ -80,5 +80,5 @@ ValueTableCard.propTypes = {
 ValueTableCard.defaultProps = {
   className: "",
   valueKeys: [],
-  renderDelay: 62
+  renderDelay: 1000 / 30 // 30 fps
 };

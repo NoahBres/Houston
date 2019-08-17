@@ -47,7 +47,7 @@ export default function Dashboard() {
         <ValueTableCard
           className="w-1/3"
           valueKeys={sensorList}
-          renderDelay={1000 / 60}
+          renderDelay={1000 / 30}
         />
         <CommandCard className="w-1/3" />
       </div>
