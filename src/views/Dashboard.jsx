@@ -54,7 +54,7 @@ export default function Dashboard() {
       </div>
       <div className="flex flex-row mt-8">
         <LiveValueGraph
-          className="w-2/3"
+          className="w-full"
           valueKeys={sensorList}
           renderDelay={1000 / 30}
         />
