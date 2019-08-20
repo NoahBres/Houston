@@ -75,18 +75,36 @@ export default function AccelerometerGraphCard({
   });
 
   useInterval(() => {
-    setAccelerometerXValues([
-      ...accelerometerXValues,
-      accelerometerXRaw.current[accelerometerXRaw.current.length - 1]
-    ]);
-    setAccelerometerYValues([
-      ...accelerometerYValues,
-      accelerometerYRaw.current[accelerometerYRaw.current.length - 1]
-    ]);
-    setAccelerometerZValues([
-      ...accelerometerZValues,
-      accelerometerZRaw.current[accelerometerZRaw.current.length - 1]
-    ]);
+    if (
+      accelerometerXRaw.current &&
+      accelerometerXRaw.current[accelerometerXRaw.current.length - 1] !==
+        accelerometerXValues[accelerometerXValues.length - 1]
+    ) {
+      setAccelerometerXValues([
+        ...accelerometerXValues,
+        accelerometerXRaw.current[accelerometerXRaw.current.length - 1]
+      ]);
+    }
+    if (
+      accelerometerYRaw.current &&
+      accelerometerYRaw.current[accelerometerYRaw.current.length - 1] !==
+        accelerometerYValues[accelerometerYValues.length - 1]
+    ) {
+      setAccelerometerYValues([
+        ...accelerometerYValues,
+        accelerometerYRaw.current[accelerometerYRaw.current.length - 1]
+      ]);
+    }
+    if (
+      accelerometerZRaw.current &&
+      accelerometerZRaw.current[accelerometerZRaw.current.length - 1] !==
+        accelerometerZValues[accelerometerZValues.length - 1]
+    ) {
+      setAccelerometerZValues([
+        ...accelerometerZValues,
+        accelerometerZRaw.current[accelerometerZRaw.current.length - 1]
+      ]);
+    }
   }, dataThrottle);
 
   return (
