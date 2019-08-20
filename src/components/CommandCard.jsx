@@ -20,7 +20,6 @@ function CommandCard({ className = "" }) {
   function handleRemoteLoggingClick() {
     const startOrStop = !isLogging ? "start" : "stop";
     SocketClient.sendMessage(`logging-${startOrStop}`, "cmd");
-    setIsLogging(i => !i);
   }
 
   function handleInputChange(event) {
@@ -75,6 +74,24 @@ function CommandCard({ className = "" }) {
     SocketClient.addStateChangeListener(handleStateChange);
 
     return () => SocketClient.removeStateChangeListener(handleStateChange);
+  }, []);
+
+  useEffect(() => {
+    const messageListener = msg => {
+      if (msg.tag === "status") {
+        if (msg.msg === "logging on") {
+          setIsLogging(true);
+        } else if (msg.msg === "logging off") {
+          setIsLogging(false);
+        }
+      }
+    };
+
+    SocketClient.addMessageListener(messageListener);
+
+    return () => {
+      SocketClient.removeMessageListener(messageListener);
+    };
   }, []);
 
   return (
