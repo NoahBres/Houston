@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 import Card from "./Card";
@@ -11,12 +11,14 @@ export default function ValueTableCard({
   valueKeys = [],
   renderDelay = 1000 / 30 // 30 fps
 }) {
-  const [valueTable, setValueTable] = useState(
-    valueKeys.reduce((acc, curr) => {
+  const valueTableRaw = useRef();
+
+  if (!valueTableRaw.current) {
+    valueTableRaw.current = valueKeys.reduce((acc, curr) => {
       acc[curr] = 0;
       return acc;
-    }, {})
-  );
+    }, {});
+  }
 
   // Copy of value table but only changes at 60fps
   const [renderedValueTable, setRenderedValueTable] = useState(
@@ -27,13 +29,17 @@ export default function ValueTableCard({
   );
 
   useInterval(() => {
-    setRenderedValueTable(o => Object.assign(o, valueTable));
+    setRenderedValueTable(o => Object.assign(o, valueTableRaw.current));
   }, renderDelay);
 
   useEffect(() => {
+    valueTableRaw.current = valueKeys.reduce((acc, curr) => {
+      acc[curr] = 0;
+      return acc;
+    }, {});
+
     const messageListener = msg => {
-      if (valueKeys.includes(msg.tag))
-        setValueTable({ ...valueTable, [msg.tag]: msg.msg });
+      if (valueKeys.includes(msg.tag)) valueTableRaw.current[msg.tag] = msg.msg;
     };
 
     SocketClient.addMessageListener(messageListener);
@@ -41,7 +47,7 @@ export default function ValueTableCard({
     return () => {
       SocketClient.removeMessageListener(messageListener);
     };
-  }, [valueKeys, valueTable]);
+  }, [valueKeys]);
 
   return (
     <Card className={`${className}`}>
