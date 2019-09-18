@@ -43,6 +43,18 @@ export default function Dashboard() {
     };
   }, [missionControlState]);
 
+  useEffect(() => {
+    const handleStateChange = state => {
+      setMissionControlState({ ...missionControlState, socketState: state });
+    };
+
+    SocketClient.addStateChangeListener(handleStateChange);
+
+    return () => {
+      SocketClient.removeStateChangeListener(handleStateChange);
+    };
+  }, []);
+
   return (
     <main className="pr-3 pb-3 overflow-y-auto h-full">
       <MissionControlContext.Provider

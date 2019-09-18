@@ -7,8 +7,6 @@ import SocketClient from "../SocketClient";
 import MissionControlContext from "../contexts/missionControlContext";
 
 function CommandCard({ className = "" }) {
-  const [socketState, setSocketState] = useState("disconnected");
-
   const [inputState, setInputState] = useState("");
   const [lastInputState, setLastInputState] = useState([]);
   const [currentLastInputPos, setCurrentLastInputPos] = useState(0);
@@ -69,16 +67,6 @@ function CommandCard({ className = "" }) {
       inputRef.current.value = lastInputState[currentLastInputPos];
   }, [currentLastInputPos, lastInputState]);
 
-  useEffect(() => {
-    function handleStateChange(state) {
-      setSocketState(state);
-    }
-
-    SocketClient.addStateChangeListener(handleStateChange);
-
-    return () => SocketClient.removeStateChangeListener(handleStateChange);
-  }, []);
-
   return (
     <Card className={`${className} relative`}>
       <div className="px-4 pt-4">
@@ -121,7 +109,7 @@ function CommandCard({ className = "" }) {
       </div>
       <div
         className={`${
-          socketState === "connected" ? "hidden" : ""
+          missionControlState.socketState === "connected" ? "hidden" : ""
         } absolute w-full h-full opacity-75 top-0 left-0 z-10 bg-notblack`}
       />
     </Card>
