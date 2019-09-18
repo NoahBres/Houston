@@ -1,8 +1,14 @@
+const SocketState = Object.freeze({
+  DISCONNECTED: Symbol("disconnected"),
+  CONNECTED: Symbol("connected"),
+  CONNECTING: Symbol("connecting")
+});
+
 class Client {
   constructor(address) {
     this.address = address;
     this.open = false;
-    this.state = "disconnected"; // Disconnected, connecting, or connected
+    this.state = SocketState.DISCONNECTED; // Disconnected, connecting, or connected
 
     this.messageListeners = [];
     this.openCloseListeners = [];
@@ -15,13 +21,13 @@ class Client {
     this.address = address || this.address;
     if (this.address === "") return;
 
-    this.setState("connecting");
+    this.setState(SocketState.CONNECTING);
 
     this.socket = new WebSocket(`ws://${this.address}`);
 
     this.socket.onopen = () => {
       this.open = true;
-      this.setState("connected");
+      this.setState(SocketState.CONNECTED);
 
       this.openCloseListeners.forEach(e => {
         e.func.call(e.thisVal, this.open);
@@ -44,7 +50,7 @@ class Client {
 
     this.socket.onclose = () => {
       this.open = false;
-      this.setState("disconnected");
+      this.setState(SocketState.DISCONNECTED);
 
       this.openCloseListeners.forEach(e => {
         e.func.call(e.thisVal, this.open);
@@ -54,7 +60,7 @@ class Client {
     };
 
     this.socket.onerror = () => {
-      this.setState("disconnected");
+      this.setState(SocketState.DISCONNECTED);
 
       // setTimeout(() => this.connect(this.address), 1000);
     };
@@ -137,4 +143,4 @@ class Client {
 
 const SocketClient = new Client("");
 
-export { SocketClient as default };
+export { SocketClient as default, SocketState };
