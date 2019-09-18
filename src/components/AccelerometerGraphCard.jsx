@@ -15,9 +15,13 @@ const { CanvasJSChart } = CanvasJSReact;
 
 export default function AccelerometerGraphCard({
   className = "",
-  dataThrottle = 1000 / 30 // 30 fps
+  dataThrottle = 1000 / 30, // 30 fps
+  chartType = "line"
 }) {
   const sensorKeys = ["accelerometer-x", "accelerometer-y", "accelerometer-z"];
+
+  const [offsetTime, setOffsetTime] = useState(0);
+  const [isOffsetTimeSet, setIsOffsetTimeSet] = useState(false);
 
   const [accelerometerXValues, setAccelerometerXValues] = useState([]);
   const [accelerometerYValues, setAccelerometerYValues] = useState([]);
@@ -45,10 +49,38 @@ export default function AccelerometerGraphCard({
     },
     theme: "dark2",
     backgroundColor: "#27293d",
+    toolTip: {
+      shared: true
+    },
+    axisY: {
+      maximum: 20,
+      minimum: -20
+    },
+    axisX: {
+      maxium: 30,
+      minimum: 0
+    },
     data: [
       {
-        type: "column",
-        dataPoints: [{ label: "Apple", y: 10 }, { label: "Orange", y: 15 }]
+        type: chartType,
+        xValueFormatString: "#.### seconds",
+        showInLegend: true,
+        name: "X",
+        dataPoints: accelerometerXValues
+      },
+      {
+        type: chartType,
+        xValueFormatString: "#.### seconds",
+        showInLegend: true,
+        name: "Y",
+        dataPoints: accelerometerYValues
+      },
+      {
+        type: chartType,
+        xValueFormatString: "#.### seconds",
+        showInLegend: true,
+        name: "Z",
+        dataPoints: accelerometerZValues
       }
     ]
   };
@@ -58,19 +90,38 @@ export default function AccelerometerGraphCard({
   useEffect(() => {
     const messageListener = msg => {
       const index = sensorKeys.indexOf(msg.tag);
+
+      if (index === -1) return;
+
+      if (!isOffsetTimeSet) {
+        setOffsetTime(new Date(msg.time).getTime());
+        setIsOffsetTimeSet(true);
+      }
+
       switch (index) {
         case 0:
-          accelerometerXRaw.current.push([msg.msg, msg.time]);
+          accelerometerXRaw.current.push({
+            y: parseFloat(msg.msg, 10),
+            x: (new Date(msg.time).getTime() - offsetTime) / 1000
+          });
           break;
         case 1:
-          accelerometerYRaw.current.push([msg.msg, msg.time]);
+          accelerometerYRaw.current.push({
+            y: parseFloat(msg.msg, 10),
+            x: (new Date(msg.time).getTime() - offsetTime) / 1000
+          });
           break;
         case 2:
-          accelerometerZRaw.current.push([msg.msg, msg.time]);
+          accelerometerZRaw.current.push({
+            y: parseFloat(msg.msg, 10),
+            x: (new Date(msg.time).getTime() - offsetTime) / 1000
+          });
           break;
         default:
           break;
       }
+
+      // chartRef.current.render();
     };
 
     SocketClient.addMessageListener(messageListener);
@@ -78,7 +129,7 @@ export default function AccelerometerGraphCard({
     return () => {
       SocketClient.removeMessageListener(messageListener);
     };
-  }, [sensorKeys]);
+  }, [isOffsetTimeSet, offsetTime, sensorKeys]);
 
   useEffect(() => {
     if (missionControlState.isLogging) {
@@ -89,6 +140,9 @@ export default function AccelerometerGraphCard({
       accelerometerXRaw.current = [];
       accelerometerYRaw.current = [];
       accelerometerZRaw.current = [];
+
+      setIsOffsetTimeSet(false);
+      chartRef.current.render();
     }
   }, [missionControlState.isLogging]);
 
@@ -136,10 +190,12 @@ export default function AccelerometerGraphCard({
 
 AccelerometerGraphCard.propTypes = {
   className: PropTypes.string,
-  dataThrottle: PropTypes.number
+  dataThrottle: PropTypes.number,
+  chartType: PropTypes.string
 };
 
 AccelerometerGraphCard.defaultProps = {
   className: "",
-  dataThrottle: 1000 / 30 // 30 fps
+  dataThrottle: 1000 / 30, // 30 fps
+  chartType: "line"
 };
