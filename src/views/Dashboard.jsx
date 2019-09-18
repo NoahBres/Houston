@@ -8,14 +8,8 @@ import AccelerometerGraphCard from "../components/AccelerometerGraphCard";
 
 import useWindowSize from "../hooks/useWindowSize";
 
-import SocketClient from "../SocketClient";
+import SocketClient, { SocketState } from "../SocketClient";
 import MissionControlContext from "../contexts/missionControlContext";
-
-const SocketState = {
-  DISCONNECTED: "disconnected",
-  CONNECTED: "connected",
-  CONNECTING: "connecting"
-};
 
 export default function Dashboard() {
   const windowSize = useWindowSize();
@@ -47,7 +41,7 @@ export default function Dashboard() {
     return () => {
       SocketClient.removeMessageListener(messageListener);
     };
-  });
+  }, [missionControlState]);
 
   return (
     <main className="pr-3 pb-3 overflow-y-auto h-full">
@@ -80,5 +74,3 @@ export default function Dashboard() {
     </main>
   );
 }
-
-export { SocketState };
