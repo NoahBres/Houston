@@ -61,7 +61,14 @@ export default function ValueTableCard({
             {Object.entries(renderedValueTable).map(([key, value]) => (
               <tr className="border-b border-gray-700" key={key}>
                 <td className="px-2 py-3 pr-5 w-1/2">{key}</td>
-                <td className="px-2 py-3 pr-5 w-1/2">{value}</td>
+                <td
+                  className="px-2 py-3 pr-5 w-1/2"
+                  style={{
+                    fontFamily: '"Lucida Console", Monaco, monospace'
+                  }}
+                >
+                  {value}
+                </td>
               </tr>
             ))}
           </tbody>
