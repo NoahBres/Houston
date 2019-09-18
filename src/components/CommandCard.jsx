@@ -14,9 +14,7 @@ function CommandCard({ className = "" }) {
 
   const lastInputStateLimit = 30;
 
-  const [missionControlState, setMissionControlState] = useContext(
-    MissionControlContext
-  );
+  const [missionControlState] = useContext(MissionControlContext);
 
   function handleRemoteLoggingClick() {
     const startOrStop = !missionControlState.isLogging ? "start" : "stop";

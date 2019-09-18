@@ -14,9 +14,7 @@ const dotStyle = {
 };
 
 export default function SocketInfoCard({ className = "", height = "" }) {
-  const [missionControlState, setMissionControlState] = useContext(
-    MissionControlContext
-  );
+  const [missionControlState] = useContext(MissionControlContext);
 
   function reconnect() {
     if (missionControlState.socketState === SocketState.DISCONNECTED)
