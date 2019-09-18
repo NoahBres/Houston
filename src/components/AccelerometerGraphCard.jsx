@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import PropTypes from "prop-types";
 
 import Card from "./Card";
 import SocketClient from "../SocketClient";
+import MissionControlContext from "../contexts/missionControlContext";
+
 import useInterval from "../hooks/useInterval";
 
 // eslint-disable-next-line
@@ -35,6 +37,8 @@ export default function AccelerometerGraphCard({
     accelerometerZRaw.current = [];
   }
 
+  const chartRef = useRef();
+
   const chartOptions = {
     title: {
       text: "Accelerometer"
@@ -48,6 +52,8 @@ export default function AccelerometerGraphCard({
       }
     ]
   };
+
+  const [missionControlState] = useContext(MissionControlContext);
 
   useEffect(() => {
     const messageListener = msg => {
@@ -72,44 +78,58 @@ export default function AccelerometerGraphCard({
     return () => {
       SocketClient.removeMessageListener(messageListener);
     };
-  });
+  }, [sensorKeys]);
+
+  useEffect(() => {
+    if (missionControlState.isLogging) {
+      setAccelerometerXValues([]);
+      setAccelerometerYValues([]);
+      setAccelerometerZValues([]);
+
+      accelerometerXRaw.current = [];
+      accelerometerYRaw.current = [];
+      accelerometerZRaw.current = [];
+    }
+  }, [missionControlState.isLogging]);
 
   useInterval(() => {
-    if (
-      accelerometerXRaw.current &&
-      accelerometerXRaw.current[accelerometerXRaw.current.length - 1] !==
-        accelerometerXValues[accelerometerXValues.length - 1]
-    ) {
-      setAccelerometerXValues([
-        ...accelerometerXValues,
-        accelerometerXRaw.current[accelerometerXRaw.current.length - 1]
-      ]);
-    }
-    if (
-      accelerometerYRaw.current &&
-      accelerometerYRaw.current[accelerometerYRaw.current.length - 1] !==
-        accelerometerYValues[accelerometerYValues.length - 1]
-    ) {
-      setAccelerometerYValues([
-        ...accelerometerYValues,
-        accelerometerYRaw.current[accelerometerYRaw.current.length - 1]
-      ]);
-    }
-    if (
-      accelerometerZRaw.current &&
-      accelerometerZRaw.current[accelerometerZRaw.current.length - 1] !==
-        accelerometerZValues[accelerometerZValues.length - 1]
-    ) {
-      setAccelerometerZValues([
-        ...accelerometerZValues,
-        accelerometerZRaw.current[accelerometerZRaw.current.length - 1]
-      ]);
+    if (missionControlState.isLogging) {
+      if (
+        accelerometerXRaw.current &&
+        accelerometerXRaw.current[accelerometerXRaw.current.length - 1] !==
+          accelerometerXValues[accelerometerXValues.length - 1]
+      ) {
+        setAccelerometerXValues([
+          ...accelerometerXValues,
+          accelerometerXRaw.current[accelerometerXRaw.current.length - 1]
+        ]);
+      }
+      if (
+        accelerometerYRaw.current &&
+        accelerometerYRaw.current[accelerometerYRaw.current.length - 1] !==
+          accelerometerYValues[accelerometerYValues.length - 1]
+      ) {
+        setAccelerometerYValues([
+          ...accelerometerYValues,
+          accelerometerYRaw.current[accelerometerYRaw.current.length - 1]
+        ]);
+      }
+      if (
+        accelerometerZRaw.current &&
+        accelerometerZRaw.current[accelerometerZRaw.current.length - 1] !==
+          accelerometerZValues[accelerometerZValues.length - 1]
+      ) {
+        setAccelerometerZValues([
+          ...accelerometerZValues,
+          accelerometerZRaw.current[accelerometerZRaw.current.length - 1]
+        ]);
+      }
     }
   }, dataThrottle);
 
   return (
     <Card className={`${className} overflow-hidden p-6`}>
-      <CanvasJSChart options={chartOptions}></CanvasJSChart>
+      <CanvasJSChart options={chartOptions} ref={chartRef}></CanvasJSChart>
     </Card>
   );
 }
