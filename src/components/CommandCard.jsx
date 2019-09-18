@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import PropTypes from "prop-types";
 
 import Card from "./Card";
 
 import SocketClient from "../SocketClient";
+import MissionControlContext from "../contexts/missionControlContext";
 
 function CommandCard({ className = "" }) {
-  const [isLogging, setIsLogging] = useState(false);
-
   const [socketState, setSocketState] = useState("disconnected");
 
   const [inputState, setInputState] = useState("");
@@ -17,8 +16,12 @@ function CommandCard({ className = "" }) {
 
   const lastInputStateLimit = 30;
 
+  const [missionControlState, setMissionControlState] = useContext(
+    MissionControlContext
+  );
+
   function handleRemoteLoggingClick() {
-    const startOrStop = !isLogging ? "start" : "stop";
+    const startOrStop = !missionControlState.isLogging ? "start" : "stop";
     SocketClient.sendMessage(`logging-${startOrStop}`, "cmd");
   }
 
@@ -76,24 +79,6 @@ function CommandCard({ className = "" }) {
     return () => SocketClient.removeStateChangeListener(handleStateChange);
   }, []);
 
-  useEffect(() => {
-    const messageListener = msg => {
-      if (msg.tag === "status") {
-        if (msg.msg === "logging on") {
-          setIsLogging(true);
-        } else if (msg.msg === "logging off") {
-          setIsLogging(false);
-        }
-      }
-    };
-
-    SocketClient.addMessageListener(messageListener);
-
-    return () => {
-      SocketClient.removeMessageListener(messageListener);
-    };
-  }, []);
-
   return (
     <Card className={`${className} relative`}>
       <div className="px-4 pt-4">
@@ -105,14 +90,14 @@ function CommandCard({ className = "" }) {
           <p className="font-light tracking-wide">Remote Logging:</p>
           <button
             className={`ml-3 text-black uppercase tracking-wide font-medium text-sm ${
-              isLogging
+              missionControlState.isLogging
                 ? "bg-red-700 hover:bg-red-600 text-white"
                 : "bg-green-500 hover:bg-green-700"
             } px-3 py-1 rounded transition-300-ease`}
             onClick={handleRemoteLoggingClick}
             type="button"
           >
-            {isLogging ? "Stop" : "Start"}
+            {missionControlState.isLogging ? "Stop" : "Start"}
           </button>
         </div>
         <div className="flex flex-row py-3 pt-6">
