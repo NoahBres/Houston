@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import Card from "./Card";
 
-import SocketClient from "../SocketClient";
+import SocketClient, { SocketState } from "../SocketClient";
 import MissionControlContext from "../contexts/missionControlContext";
 
 function CommandCard({ className = "" }) {
@@ -109,7 +109,9 @@ function CommandCard({ className = "" }) {
       </div>
       <div
         className={`${
-          missionControlState.socketState === "connected" ? "hidden" : ""
+          missionControlState.socketState === SocketState.CONNECTED
+            ? "hidden"
+            : ""
         } absolute w-full h-full opacity-75 top-0 left-0 z-10 bg-notblack`}
       />
     </Card>

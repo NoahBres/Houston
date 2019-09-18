@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 
 import Card from "./Card";
 
-import SocketClient from "../SocketClient";
+import SocketClient, { SocketState } from "../SocketClient";
+import MissionControlContext from "../contexts/missionControlContext";
 
 const dotStyle = {
   width: "0.22rem",
@@ -13,22 +14,16 @@ const dotStyle = {
 };
 
 export default function SocketInfoCard({ className = "", height = "" }) {
-  const [socketState, setSocketState] = useState("disconnected");
+  const [missionControlState, setMissionControlState] = useContext(
+    MissionControlContext
+  );
 
   function reconnect() {
-    if (socketState === "disconnected") SocketClient.connect();
-    else if (socketState === "connected") SocketClient.close();
+    if (missionControlState.socketState === SocketState.DISCONNECTED)
+      SocketClient.connect();
+    else if (missionControlState.socketState === SocketState.CONNECTED)
+      SocketClient.close();
   }
-
-  useEffect(() => {
-    function handleStateChange(state) {
-      setSocketState(state);
-    }
-
-    SocketClient.addStateChangeListener(handleStateChange);
-
-    return () => SocketClient.removeStateChangeListener(handleStateChange);
-  }, []);
 
   return (
     <Card className={className} height={height}>
@@ -45,11 +40,19 @@ export default function SocketInfoCard({ className = "", height = "" }) {
         </p>
         <p className="font-light tracking-wide">
           {(() => {
-            if (socketState === "connected") return "Connected ✔";
-            if (socketState === "disconnected") return "Disconnected ❌";
+            if (missionControlState.socketState === SocketState.CONNECTED)
+              return "Connected ✔";
+            if (missionControlState.socketState === SocketState.DISCONNECTED)
+              return "Disconnected ❌";
             return "Connecting";
           })()}
-          <span className={socketState !== "connecting" ? "hidden" : ""}>
+          <span
+            className={
+              missionControlState.socketState !== SocketState.CONNECTING
+                ? "hidden"
+                : ""
+            }
+          >
             <span
               className="dot first rounded-full bg-white inline-block"
               style={{
@@ -74,7 +77,7 @@ export default function SocketInfoCard({ className = "", height = "" }) {
         </p>
         <button
           className={`mt-20 transition-300-ease ${
-            socketState === "connecting"
+            missionControlState.socketState === SocketState.CONNECTING
               ? "text-gray-600 pointer-events-none"
               : ""
           }`}
@@ -82,8 +85,10 @@ export default function SocketInfoCard({ className = "", height = "" }) {
           type="button"
         >
           {(() => {
-            if (socketState === "disconnected") return "Reconnect";
-            if (socketState === "connected") return "Disconnect";
+            if (missionControlState.socketState === SocketState.DISCONNECTED)
+              return "Reconnect";
+            if (missionControlState.socketState === SocketState.CONNECTED)
+              return "Disconnect";
             return "";
           })()}
         </button>
