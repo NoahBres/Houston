@@ -80,7 +80,11 @@ export default function Dashboard() {
           <CommandCard className="w-1/3" />
         </div>
         <div className="flex flex-row mt-8">
-          <AccelerometerGraphCard className="w-full" renderDelay={1000 / 30} />
+          <AccelerometerGraphCard
+            className="w-full"
+            dataThrottle={1000 / 30}
+            chartType="line"
+          />
         </div>
       </MissionControlContext.Provider>
     </main>
