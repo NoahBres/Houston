@@ -5,6 +5,7 @@ import Card from "./Card";
 
 import SocketClient, { SocketState } from "../SocketClient";
 import MissionControlContext from "../contexts/missionControlContext";
+import AppContext from "../contexts/appContext";
 
 const dotStyle = {
   width: "0.22rem",
@@ -15,6 +16,7 @@ const dotStyle = {
 
 export default function SocketInfoCard({ className = "", height = "" }) {
   const [missionControlState] = useContext(MissionControlContext);
+  const [appContext] = useContext(AppContext);
 
   function reconnect() {
     if (missionControlState.socketState === SocketState.DISCONNECTED)
@@ -31,10 +33,8 @@ export default function SocketInfoCard({ className = "", height = "" }) {
       </div>
       <div className="px-4 my-3 flex flex-col justify-between">
         <p className="font-light tracking-wider">
-          {SocketClient.address.split(":")[0]}
-          <span className="text-gray-500">
-            :{SocketClient.address.split(":")[1]}
-          </span>
+          {appContext.baseAddr}
+          <span className="text-gray-500">:{appContext.socketPort}</span>
         </p>
         <p className="font-light tracking-wide">
           {(() => {
