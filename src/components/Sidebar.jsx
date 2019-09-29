@@ -27,28 +27,30 @@ export default function Sidebar({ title = "" }) {
         <div className="w-5/6 h-px mb-4 bg-white opacity-50" />
       </div>
       <ul className="list-disc pl-6">
-        {routes.map(prop => {
-          return (
-            <li key={prop.path} className="list-none">
-              <NavLink
-                exact
-                to={prop.path}
-                className="flex flex-row items-center text-center py-5"
-              >
-                <SvgIcon
-                  d={prop.svg_path}
-                  fill="#fff"
-                  width="1.1rem"
-                  viewBox={prop.svg_viewbox}
-                  className="ml-2 mr-4 opacity-75"
-                />
-                <span className="uppercase text tracking-wide">
-                  {prop.name}
-                </span>
-              </NavLink>
-            </li>
-          );
-        })}
+        {routes
+          .filter(e => e.showInSideBar)
+          .map(prop => {
+            return (
+              <li key={prop.path} className="list-none">
+                <NavLink
+                  exact
+                  to={prop.path}
+                  className="flex flex-row items-center text-center py-5"
+                >
+                  <SvgIcon
+                    d={prop.svg_path}
+                    fill="#fff"
+                    width="1.1rem"
+                    viewBox={prop.svg_viewbox}
+                    className="ml-2 mr-4 opacity-75"
+                  />
+                  <span className="uppercase text tracking-wide">
+                    {prop.name}
+                  </span>
+                </NavLink>
+              </li>
+            );
+          })}
       </ul>
     </aside>
   );
