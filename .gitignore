@@ -87,4 +87,4 @@ typings/
 .vscode/
 
 # Compiled output
-dist/
+# dist/
