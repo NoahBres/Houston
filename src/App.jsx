@@ -7,6 +7,7 @@ import AppContext from "./contexts/appContext";
 
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
+import BottomBar from "./components/BottomBar";
 
 export default function App() {
   const [appContextState, setAppContextState] = useState({
@@ -32,8 +33,12 @@ export default function App() {
     <AppContext.Provider value={[appContextState, setAppContextState]}>
       <HashRouter>
         <Navbar title="Houston" />
-        <div className="flex flex-row" style={{ height: "calc(100vh - 75px)" }}>
+        <div
+          className="flex flex-row sm:pt-0 pt-5"
+          style={{ height: "calc(100vh - 75px)", paddingBottom: "0.4em" }}
+        >
           <Sidebar title="Team 16626" avatar="react-logo.png" />
+          <BottomBar title="Team 16626" />
           <section className="content w-full">
             <Switch>
               {routes.map(prop => {
