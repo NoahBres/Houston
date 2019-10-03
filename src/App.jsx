@@ -33,7 +33,7 @@ export default function App() {
       <HashRouter>
         <Navbar title="Houston" />
         <div className="flex flex-row" style={{ height: "calc(100vh - 75px)" }}>
-          <Sidebar title="Team 10940" avatar="react-logo.png" />
+          <Sidebar title="Team 16626" avatar="react-logo.png" />
           <section className="content w-full">
             <Switch>
               {routes.map(prop => {
