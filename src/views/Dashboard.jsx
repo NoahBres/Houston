@@ -53,33 +53,33 @@ export default function Dashboard() {
     return () => {
       SocketClient.removeStateChangeListener(handleStateChange);
     };
-  }, []);
+  }, [missionControlState]);
 
   return (
-    <main className="pr-3 pb-3 overflow-y-auto h-full">
+    <main className="pr-3 pb-3 overflow-y-auto h-full pr-5 md:pr-0">
       <MissionControlContext.Provider
         value={[missionControlState, setMissionControlState]}
       >
-        <div className="flex flex-row mb-8">
+        <div className="flex lg:flex-row flex-col mb-8">
           <SocketInfoCard
-            className="w-1/3"
+            className="lg:w-1/3 w-full"
             height={windowSize.innerHeight > 400 ? "20rem" : "13rem"}
           />
           <LogCard
-            className="w-2/3"
+            className="lg:w-2/3 w-full lg:mt-0 mt-8"
             height={windowSize.innerHeight > 400 ? "20rem" : "13rem"}
             filter={sensorList}
           />
         </div>
-        <div className="flex flex-row mt-8">
+        <div className="flex lg:flex-row flex-col mt-8">
           <ValueTableCard
-            className="w-1/3"
+            className="lg:w-1/3 w-full"
             valueKeys={sensorList}
             dataThrottle={1000 / 30}
           />
-          <CommandCard className="w-1/3" />
+          <CommandCard className="w-full lg:w-2/3 xl:w-1/3 lg:mt-0 mt-8" />
         </div>
-        <div className="flex flex-row mt-8">
+        <div className="flex lg:flex-row flex-col mt-8">
           <AccelerometerGraphCard
             className="w-full"
             dataThrottle={1000 / 30}
