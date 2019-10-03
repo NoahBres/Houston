@@ -10,9 +10,10 @@ import avatarUI from "../../public/assets/react-logo.png";
 export default function Sidebar({ title = "" }) {
   return (
     <aside
-      className="mx-5 my-3 mt-0 rounded w-56"
+      className="mx-5 my-3 mr-2 md:mr-5 mt-0 rounded w-56 sm:block hidden"
       style={{
-        background: "linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%)"
+        background: "linear-gradient(0deg, #3358f4 0%, #1d8cf8 100%)",
+        minWidth: "190px"
       }}
     >
       <div className="flex flex-col items-center">
