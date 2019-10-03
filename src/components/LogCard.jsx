@@ -42,7 +42,7 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
 
   const [settings, setSettings] = useState({
     showTime: true,
-    showDate: true
+    showDate: false
   });
 
   const settingsHandleInputChange = event => {
@@ -159,29 +159,37 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
           </div>
         </div>
       </div>
-      <div className="px-4 my-3" style={{ height: "calc(100% - 7rem)" }}>
-        <ul
-          ref={listRef}
-          className={`overflow-auto h-full ${
-            logs.length !== 0 ? "" : "hidden"
-          }`}
+      <div
+        className="px-4 my-3 overflow-auto"
+        ref={listRef}
+        style={{ height: "calc(100% - 7rem)" }}
+      >
+        <table
+          className={`h-full table-fixed ${logs.length !== 0 ? "" : "hidden"}`}
         >
-          {logs.map(e => (
-            <li key={`${e}`} className="flex flex-row">
-              <p
-                className={`text-gray-600 ${
-                  settings.showTime ? "" : "hidden"
-                } ${settings.showDate ? "w-48" : "w-24"}`}
-              >
-                {`${settings.showDate ? e[2].split(" ")[0] : ""} ${
-                  e[2].split(" ")[1]
-                }`}
-              </p>
-              <p className="w-32">{e[1]}</p>
-              <p className="max-w-md">{e[0]}</p>
-            </li>
-          ))}
-        </ul>
+          <tbody>
+            {logs.map(e => (
+              <tr key={`${e}`} className="flex flex-row">
+                <td
+                  className={`text-gray-600 ${
+                    settings.showTime ? "" : "hidden"
+                  } ${settings.showDate ? "w-4/12" : "w-3/12"}`}
+                  style={{ minWidth: "5em" }}
+                >
+                  {`${settings.showDate ? e[2].split(" ")[0] : ""} ${
+                    e[2].split(" ")[1]
+                  }`}
+                </td>
+                <td className={`${settings.showDate ? "w-2/12" : "w-2/12"}`}>
+                  {e[1]}
+                </td>
+                <td className={`${settings.showDate ? "w-6/12" : "w-7/12"}`}>
+                  {e[0]}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <h4 className={`mt-6 ${logs.length !== 0 ? "hidden" : ""}`}>
           You have no logs{" "}
           <span role="img" aria-label="smile">
