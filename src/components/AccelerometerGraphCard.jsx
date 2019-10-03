@@ -191,7 +191,8 @@ export default function AccelerometerGraphCard({
       if (
         accelerometerXRaw.current &&
         accelerometerXRaw.current[accelerometerXRaw.current.length - 1] !==
-          accelerometerXValues[accelerometerXValues.length - 1]
+          accelerometerXValues[accelerometerXValues.length - 1] &&
+        accelerometerXRaw.current[accelerometerXRaw.current.length - 1]
       ) {
         setAccelerometerXValues([
           ...accelerometerXValues,
@@ -201,7 +202,8 @@ export default function AccelerometerGraphCard({
       if (
         accelerometerYRaw.current &&
         accelerometerYRaw.current[accelerometerYRaw.current.length - 1] !==
-          accelerometerYValues[accelerometerYValues.length - 1]
+          accelerometerYValues[accelerometerYValues.length - 1] &&
+        accelerometerYRaw.current[accelerometerYRaw.current.length - 1]
       ) {
         setAccelerometerYValues([
           ...accelerometerYValues,
@@ -211,7 +213,8 @@ export default function AccelerometerGraphCard({
       if (
         accelerometerZRaw.current &&
         accelerometerZRaw.current[accelerometerZRaw.current.length - 1] !==
-          accelerometerZValues[accelerometerZValues.length - 1]
+          accelerometerZValues[accelerometerZValues.length - 1] &&
+        accelerometerZRaw.current[accelerometerZRaw.current.length - 1]
       ) {
         setAccelerometerZValues([
           ...accelerometerZValues,
