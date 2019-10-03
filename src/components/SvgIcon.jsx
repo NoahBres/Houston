@@ -5,6 +5,7 @@ export default function SvgIcon({
   style = {},
   fill = "#000",
   width = "100%",
+  height = "",
   className = "",
   pathClassName = "",
   // viewBox="0 0 32 32",
@@ -14,8 +15,8 @@ export default function SvgIcon({
   return (
     <svg
       width={width}
-      height={width}
-      style={{ ...style, height: width, width }}
+      height={height.length !== 0 ? height : width}
+      style={{ ...style, height: height.length !== 0 ? height : width, width }}
       viewBox={`0 0 ${viewBox[0]} ${viewBox[1]}`}
       xmlns="http://www.w3.org/2000/svg"
       className={className}
@@ -35,6 +36,7 @@ SvgIcon.propTypes = {
   style: PropTypes.object,
   fill: PropTypes.string,
   width: PropTypes.string,
+  height: PropTypes.string,
   className: PropTypes.string,
   pathClassName: PropTypes.string,
   viewBox: PropTypes.arrayOf(PropTypes.number),
@@ -48,6 +50,7 @@ SvgIcon.defaultProps = {
   style: {},
   fill: "#000",
   width: "100%",
+  height: "",
   className: "",
   pathClassName: "",
   viewBox: [32, 32],
