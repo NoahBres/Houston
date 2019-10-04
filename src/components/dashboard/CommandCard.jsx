@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import PropTypes from "prop-types";
 
-import Card from "./Card";
+import Card from "../Card";
 
-import SocketClient, { SocketState } from "../SocketClient";
-import MissionControlContext from "../contexts/missionControlContext";
+import SocketClient, { SocketState } from "../../SocketClient";
+import MissionControlContext from "../../contexts/missionControlContext";
 
 function CommandCard({ className = "" }) {
   const [inputState, setInputState] = useState("");

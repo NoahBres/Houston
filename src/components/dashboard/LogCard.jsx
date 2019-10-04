@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 
 import useStayScrolled from "react-stay-scrolled";
 
-import Card from "./Card";
-import SvgIcon from "./SvgIcon";
-import Dropdown, { useDropdown } from "./Dropdown";
+import Card from "../Card";
+import SvgIcon from "../SvgIcon";
+import Dropdown, { useDropdown } from "../Dropdown";
 
-import SocketClient from "../SocketClient";
-import useHover from "../hooks/useHover";
+import SocketClient from "../../SocketClient";
+import useHover from "../../hooks/useHover";
 
 const settingsSvgPath = [
   "M10.032,8.367c-1.112,0-2.016,0.905-2.016,2.018c0,1.111,0.904,2.014,2.016,2.014c1.111,0,2.014-0.902,2.014-2.014C12.046,9.271,11.143,8.367,10.032,8.367z M10.032,11.336c-0.525,0-0.953-0.427-0.953-0.951c0-0.526,0.427-0.955,0.953-0.955c0.524,0,0.951,0.429,0.951,0.955C10.982,10.909,10.556,11.336,10.032,11.336z",
@@ -191,7 +191,7 @@ export default function LogCard({ className = "", height = "", filter = [] }) {
           </tbody>
         </table>
         <h4 className={`mt-6 ${logs.length !== 0 ? "hidden" : ""}`}>
-          You have no logs{" "}
+          You have no logs
           <span role="img" aria-label="smile">
             🙂
           </span>

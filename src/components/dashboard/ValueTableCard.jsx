@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import Card from "./Card";
+import Card from "../Card";
 
-import SocketClient from "../SocketClient";
-import useInterval from "../hooks/useInterval";
+import SocketClient from "../../SocketClient";
+import useInterval from "../../hooks/useInterval";
 
 export default function ValueTableCard({
   className = "",

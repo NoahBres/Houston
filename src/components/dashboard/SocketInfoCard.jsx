@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 
-import Card from "./Card";
+import Card from "../Card";
 
-import SocketClient, { SocketState } from "../SocketClient";
-import MissionControlContext from "../contexts/missionControlContext";
-import AppContext from "../contexts/appContext";
+import SocketClient, { SocketState } from "../../SocketClient";
+import MissionControlContext from "../../contexts/missionControlContext";
+import AppContext from "../../contexts/appContext";
 
 const dotStyle = {
   width: "0.22rem",

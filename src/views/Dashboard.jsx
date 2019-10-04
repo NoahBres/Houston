@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import LogCard from "../components/LogCard";
-import SocketInfoCard from "../components/SocketInfoCard";
-import ValueTableCard from "../components/ValueTableCard";
-import CommandCard from "../components/CommandCard";
-import AccelerometerGraphCard from "../components/AccelerometerGraphCard";
+import LogCard from "../components/dashboard/LogCard";
+import SocketInfoCard from "../components/dashboard/SocketInfoCard";
+import ValueTableCard from "../components/dashboard/ValueTableCard";
+import CommandCard from "../components/dashboard/CommandCard";
+import AccelerometerGraphCard from "../components/dashboard/AccelerometerGraphCard";
 
 import useWindowSize from "../hooks/useWindowSize";
 

@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import PropTypes from "prop-types";
 
-import Dropdown, { useDropdown } from "./Dropdown";
-import Card from "./Card";
-import SvgIcon from "./SvgIcon";
+import Dropdown, { useDropdown } from "../Dropdown";
+import Card from "../Card";
+import SvgIcon from "../SvgIcon";
 
-import SocketClient from "../SocketClient";
-import MissionControlContext from "../contexts/missionControlContext";
+import SocketClient from "../../SocketClient";
+import MissionControlContext from "../../contexts/missionControlContext";
 
-import useInterval from "../hooks/useInterval";
-import useHover from "../hooks/useHover";
+import useInterval from "../../hooks/useInterval";
+import useHover from "../../hooks/useHover";
 
 // eslint-disable-next-line
-import CanvasJSReact from "../lib/canvasjs/canvasjs.react";
+import CanvasJSReact from "../../lib/canvasjs/canvasjs.react";
 
 // const { CanvasJS } = CanvasJSReact;
 const { CanvasJSChart } = CanvasJSReact;
@@ -230,7 +230,7 @@ export default function AccelerometerGraphCard({
         <div className="w-1/2 inline-block">
           <h5 className="text-xs font-light text-gray-600">Real time</h5>
           <h2 className="text-3xl font-thin">
-            Accelerometer{" "}
+            Accelerometer
             <span
               role="img"
               aria-label="x"
